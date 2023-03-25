@@ -1,11 +1,13 @@
 import PropTypes from "prop-types";
 import { Box, Divider, MenuItem, MenuList, Popover, Typography } from "@mui/material";
 import { useSignOut } from "react-auth-kit";
+import { useAuthUser } from "react-auth-kit";
 
 export const AccountPopover = (props) => {
   const { anchorEl, onClose, open } = props;
   const signOut = useSignOut();
-
+  const authUserData = useAuthUser();
+  const { firstname, lastname, email } = authUserData();
   return (
     <Popover
       anchorEl={anchorEl}
@@ -25,7 +27,10 @@ export const AccountPopover = (props) => {
       >
         <Typography variant="overline">Account</Typography>
         <Typography color="text.secondary" variant="body2">
-          Anika Visser
+          {`${firstname} ${lastname}`}
+        </Typography>
+        <Typography color="text.secondary" variant="body2">
+          {email}
         </Typography>
       </Box>
       <Divider />
