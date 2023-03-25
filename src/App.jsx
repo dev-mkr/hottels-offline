@@ -18,15 +18,15 @@ function App() {
       <Route path="/auth/register" element={<Register />} />
       <Route path="/auth/Admin-register" element={<AdminRegister />} />
       {/* we want to protect these routes */}
-      <Route index element={<Dashboard />} />
-      {/* <Route
+      {/* <Route index element={<Dashboard />} /> */}
+      <Route
         path="/*"
         element={
           <RequireAuth loginPath={"/auth/login"}>
             <Dashboard />
           </RequireAuth>
         }
-      ></Route> */}
+      ></Route>
       {/* catch all */}
       <Route path="*" element={<NotFound />} />
     </Routes>
