@@ -74,7 +74,7 @@ export const SideNav = (props) => {
               {
                 /* const active = item.path ? pathname === item.path : false; */
               }
-              const active = false;
+              const active = item.title === "Hotels" && true;
 
               return (
                 <SideNavItem
