@@ -20,6 +20,7 @@ const Page = ({ children }) => (
     <Routes>
       <Route index element={<Hotels />} />
       <Route path="/store" element={<div>store</div>} />
+      <Route path="*" element={<NotFound />} />
     </Routes>
     {/* <Box
       component="main"
