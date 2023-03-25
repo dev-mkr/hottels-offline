@@ -2,6 +2,7 @@
 // import { Box, Container, Unstable_Grid2 as Grid } from "@mui/material";
 import { Route, Routes } from "react-router-dom";
 import { Layout as DashboardLayout } from "../../layouts/dashboard/layout";
+import NotFound from "../NotFound";
 // import { OverviewBudget } from "../sections/overview/overview-budget";
 // import { OverviewLatestOrders } from "../sections/overview/overview-latest-orders";
 // import { OverviewLatestProducts } from "../sections/overview/overview-latest-products";
