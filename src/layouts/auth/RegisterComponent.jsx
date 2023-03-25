@@ -55,8 +55,9 @@ const Page = ({ roles, url }) => {
           navigate("/");
         }
       } catch (err) {
+        console.log();
         helpers.setStatus({ success: false });
-        helpers.setErrors({ submit: err.message });
+        helpers.setErrors({ submit: err.response.data.message });
         helpers.setSubmitting(false);
       }
     },
