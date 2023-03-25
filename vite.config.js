@@ -6,13 +6,13 @@ import { resolve } from "path";
 export default defineConfig({
   plugins: [react()],
   build: {
-    outDir: "build",
+    outDir: "dist",
   },
   server: {
     middleware: [
       (req, res, next) => {
         if (req.method === "GET" && !req.path.startsWith("/api")) {
-          res.sendFile(resolve(__dirname, "build", "index.html"));
+          res.sendFile(resolve(__dirname, "dist", "index.html"));
         } else {
           next();
         }
