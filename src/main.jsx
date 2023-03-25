@@ -10,16 +10,16 @@ import { AuthProvider } from "react-auth-kit";
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <GlobalConfig>
-      <AuthProvider
+      {/* <AuthProvider
         authType={"cookie"}
         authName={"_auth"}
         cookieDomain={window.location.hostname}
         cookieSecure={false}
-      >
-        <BrowserRouter>
-          <App />
-        </BrowserRouter>
-      </AuthProvider>
+      > */}
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
+      {/* </AuthProvider> */}
     </GlobalConfig>
   </React.StrictMode>
 );
