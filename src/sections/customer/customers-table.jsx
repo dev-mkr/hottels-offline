@@ -13,9 +13,10 @@ import {
   TablePagination,
   TableRow,
   Typography,
+  Button,
 } from "@mui/material";
-import { Scrollbar } from "../components/scrollbar";
-import { getInitials } from "../utils/get-initials";
+import { Scrollbar } from "../../components/Scrollbar";
+import { getInitials } from "../../utils/get-initials";
 
 export const CustomersTable = (props) => {
   const {
@@ -42,35 +43,22 @@ export const CustomersTable = (props) => {
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell padding="checkbox">
-                  <Checkbox
-                    checked={selectedAll}
-                    indeterminate={selectedSome}
-                    onChange={(event) => {
-                      if (event.target.checked) {
-                        onSelectAll?.();
-                      } else {
-                        onDeselectAll?.();
-                      }
-                    }}
-                  />
-                </TableCell>
+                <TableCell padding="checkbox">No</TableCell>
                 <TableCell>Name</TableCell>
-                <TableCell>Email</TableCell>
-                <TableCell>Location</TableCell>
-                <TableCell>Phone</TableCell>
-                <TableCell>Signed Up</TableCell>
+                <TableCell>Token</TableCell>
+                <TableCell>Date</TableCell>
+                <TableCell>Actions</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {items.map((customer) => {
+              {items.map((customer, index) => {
                 const isSelected = selected.includes(customer.id);
                 const createdAt = format(customer.createdAt, "dd/MM/yyyy");
 
                 return (
                   <TableRow hover key={customer.id} selected={isSelected}>
                     <TableCell padding="checkbox">
-                      <Checkbox
+                      {/* <Checkbox
                         checked={isSelected}
                         onChange={(event) => {
                           if (event.target.checked) {
@@ -79,20 +67,33 @@ export const CustomersTable = (props) => {
                             onDeselectOne?.(customer.id);
                           }
                         }}
-                      />
+                      /> */}
+                      {index + 1}
                     </TableCell>
-                    <TableCell>
+                    <TableCell width="20%">
                       <Stack alignItems="center" direction="row" spacing={2}>
-                        <Avatar src={customer.avatar}>{getInitials(customer.name)}</Avatar>
+                        {/* <Avatar src={customer.avatar}>{getInitials(customer.name)}</Avatar> */}
                         <Typography variant="subtitle2">{customer.name}</Typography>
                       </Stack>
                     </TableCell>
-                    <TableCell>{customer.email}</TableCell>
-                    <TableCell>
-                      {customer.address.city}, {customer.address.state}, {customer.address.country}
-                    </TableCell>
                     <TableCell>{customer.phone}</TableCell>
                     <TableCell>{createdAt}</TableCell>
+
+                    <TableCell
+                      width="70%"
+                      // sx={{ display: "flex", justifyContent: "space-between" }}
+                    >
+                      <Stack direction="row" spacing={1}>
+                        <Button variant="contained">Rooms</Button>
+                        <Button variant="contained">View contracts</Button>
+                        <Button variant="contained">Add rooms</Button>
+                        <Button variant="contained">Add Hotel owner</Button>
+                        <Button variant="contained">Add DMC</Button>
+                        <Button variant="contained" color="error">
+                          Delete
+                        </Button>
+                      </Stack>
+                    </TableCell>
                   </TableRow>
                 );
               })}

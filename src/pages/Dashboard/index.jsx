@@ -1,6 +1,7 @@
-import { subDays, subHours } from "date-fns";
-import { Box, Container, Unstable_Grid2 as Grid } from "@mui/material";
-import { Layout as DashboardLayout } from "../layouts/dashboard/layout";
+// import { subDays, subHours } from "date-fns";
+// import { Box, Container, Unstable_Grid2 as Grid } from "@mui/material";
+import { Route, Routes } from "react-router-dom";
+import { Layout as DashboardLayout } from "../../layouts/dashboard/layout";
 // import { OverviewBudget } from "../sections/overview/overview-budget";
 // import { OverviewLatestOrders } from "../sections/overview/overview-latest-orders";
 // import { OverviewLatestProducts } from "../sections/overview/overview-latest-products";
@@ -10,10 +11,16 @@ import { Layout as DashboardLayout } from "../layouts/dashboard/layout";
 // import { OverviewTotalProfit } from "../sections/overview/overview-total-profit";
 // import { OverviewTraffic } from "../sections/overview/overview-traffic";
 
+//components
+import Hotels from "./components/Hotels";
 const now = new Date();
 
-const Page = () => (
+const Page = ({ children }) => (
   <DashboardLayout>
+    <Routes>
+      <Route index element={<Hotels />} />
+      <Route path="/store" element={<div>store</div>} />
+    </Routes>
     {/* <Box
       component="main"
       sx={{

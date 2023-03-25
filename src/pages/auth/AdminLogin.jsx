@@ -4,7 +4,7 @@ import Layout from "../../layouts/auth/Layout";
 const Page = () => {
   return (
     <Layout>
-      <LoginComponent url="/api/user/login" />
+      <LoginComponent url="/api/admin/login" role="admin" />
     </Layout>
   );
 };

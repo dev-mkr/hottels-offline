@@ -18,7 +18,7 @@ import { useSignIn } from "react-auth-kit";
 import { useNavigate } from "react-router-dom";
 import axios from "../../api/axios";
 
-const Page = () => {
+const Page = ({ roles, url }) => {
   const signIn = useSignIn();
   const navigate = useNavigate();
   const formik = useFormik({
@@ -41,7 +41,7 @@ const Page = () => {
       try {
         const res = await axios.request({
           method: "POST",
-          url: "/api/user/register",
+          url,
           headers: { "content-type": "application/json" },
           data: JSON.stringify(values),
         });
@@ -76,7 +76,6 @@ const Page = () => {
           sx={{
             maxWidth: 550,
             px: 3,
-            py: "100px",
             width: "100%",
           }}
         >
@@ -150,15 +149,27 @@ const Page = () => {
                   value={formik.values.role}
                   id="Role"
                   name="user role"
-                  label="Role"
+                  label="You are?"
                 >
-                  <MenuItem value="agent">Agent</MenuItem>
-                  <MenuItem value="client">Client</MenuItem>
-                  <MenuItem value="traveler">Traveler</MenuItem>
-                  <MenuItem value="dmc">dmc</MenuItem>
+                  {roles.map((role) => (
+                    <MenuItem key={role} value={role.toLowerCase()}>
+                      {role}
+                    </MenuItem>
+                  ))}
                 </TextField>
-              </Stack>
 
+                <Typography color="text.secondary" variant="body2">
+                  Are you an admin? &nbsp;
+                  <Link
+                    component={LinkComponent}
+                    to="/auth/admin-register"
+                    underline="hover"
+                    variant="subtitle2"
+                  >
+                    Register here
+                  </Link>
+                </Typography>
+              </Stack>
               {formik.errors.submit && (
                 <Typography color="error" sx={{ mt: 3 }} variant="body2">
                   {formik.errors.submit}

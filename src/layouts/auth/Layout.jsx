@@ -7,7 +7,7 @@ const Page = ({ children }) => {
         component="main"
         sx={{
           display: "flex",
-          flex: "1 1 auto",
+          flex: "1 1",
           // height: "100vh",
         }}
       >
@@ -28,9 +28,8 @@ const Page = ({ children }) => {
             {/*  */}
           </Grid>
           <Grid
-            xs={12}
-            lg={6}
             sx={{
+              flex: 1,
               height: "100vh",
               width: 32,
               "& img": {

@@ -9,7 +9,7 @@ import axios from "../../api/axios";
 
 const handleMethodChange = () => null;
 
-const Page = () => {
+const Page = ({ url, role }) => {
   const signIn = useSignIn();
   const navigate = useNavigate();
   const formik = useFormik({
@@ -25,7 +25,7 @@ const Page = () => {
       try {
         const res = await axios.request({
           method: "POST",
-          url: "/api/user/login",
+          url,
           headers: { "content-type": "application/json" },
           data: JSON.stringify(values),
         });
@@ -38,15 +38,6 @@ const Page = () => {
             authState: res.data.response.user,
           });
           navigate("/");
-
-          //   signIn({
-          //     token: res.data.response.authorisation.token,
-          //
-          //     tokenType: "Bearer",
-          //     // authState: res.data.response.user,
-          //   });
-
-          // }
         }
       } catch (err) {
         helpers.setStatus({ success: false });
@@ -64,6 +55,7 @@ const Page = () => {
         alignItems: "center",
         display: "flex",
         justifyContent: "center",
+        position: "relative",
       }}
     >
       <Box
@@ -76,7 +68,7 @@ const Page = () => {
       >
         <div>
           <Stack spacing={1} sx={{ mb: 3 }}>
-            <Typography variant="h4">Login</Typography>
+            <Typography variant="h4">Login{role === "admin" ? "-admin" : ""}</Typography>
             <Typography color="text.secondary" variant="body2">
               Don&apos;t have an account? &nbsp;
               <Link
@@ -88,6 +80,25 @@ const Page = () => {
                 Register
               </Link>
             </Typography>
+            {role === "admin" ? (
+              ""
+            ) : (
+              <Typography
+                color="text.secondary"
+                variant="body2"
+                sx={{ position: "absolute", top: 0, right: 0, p: 3 }}
+              >
+                An admin? &nbsp;
+                <Link
+                  component={LinkComponent}
+                  to="/auth/admin-login"
+                  underline="hover"
+                  variant="subtitle2"
+                >
+                  Go here
+                </Link>
+              </Typography>
+            )}
           </Stack>
           {/* <Tabs onChange={handleMethodChange} sx={{ mb: 3 }}>
             <Tab label="Email" value="email" />
