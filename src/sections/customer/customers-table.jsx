@@ -85,10 +85,8 @@ export const CustomersTable = (props) => {
                     >
                       <Stack direction="row" spacing={1}>
                         <Button variant="contained">Rooms</Button>
-                        <Button variant="contained">View contracts</Button>
-                        <Button variant="contained">Add rooms</Button>
-                        <Button variant="contained">Add Hotel owner</Button>
-                        <Button variant="contained">Add DMC</Button>
+                        <Button variant="contained">Contracts</Button>
+                        <Button variant="contained">assign</Button>
                         <Button variant="contained" color="error">
                           Delete
                         </Button>
