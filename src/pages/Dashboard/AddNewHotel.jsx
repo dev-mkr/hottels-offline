@@ -11,9 +11,10 @@ const AddNewHotel = () => {
   // //   onPlaceSelected: (place) => console.log(place),
   // // });
   // return <TextField fullWidth color="secondary" variant="outlined" inputRef={materialRef} />;
+  // console.log(import.meta.env.VITE_API_KEY);
   return (
     <Autocomplete
-      apiKey={"AIzaSyAfFUn_SFiAXZwXQ0-GQCjd-Okdfxy3mqA"}
+      apiKey={"AIzaSyCdGv5cjpA0dMUCSolCf89tl_vgccGvsu0"}
       onPlaceSelected={(selected) => console.log(selected)}
     />
   );

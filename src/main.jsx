@@ -7,6 +7,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import { AuthProvider } from "react-auth-kit";
 
+//create error bounders
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <GlobalConfig>
