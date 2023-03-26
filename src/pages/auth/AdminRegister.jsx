@@ -1,11 +1,11 @@
-import RegisterComponent from "../../layouts/auth/RegisterComponent";
+import AdminRegisterComponent from "../../layouts/auth/AdminRegisterComponent";
 
 import Layout from "../../layouts/auth/Layout";
 
 const Page = () => {
   return (
     <Layout>
-      <RegisterComponent
+      <AdminRegisterComponent
         roles={["account_owner", "hotel_director", "super_admin"]}
         url="/api/admin/register"
       />

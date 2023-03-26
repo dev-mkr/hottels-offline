@@ -35,13 +35,13 @@ const Page = ({ url, role }) => {
             token: res.data.response.authorisation.token,
             expiresIn: 3600,
             tokenType: "Bearer",
-            authState: res.data.response.user,
+            authState: res.data.response,
           });
           navigate("/");
         }
       } catch (err) {
         helpers.setStatus({ success: false });
-        helpers.setErrors({ submit: err.message });
+        helpers.setErrors({ submit: err.response.data.message });
         helpers.setSubmitting(false);
       }
     },

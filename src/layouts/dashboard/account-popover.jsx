@@ -7,7 +7,8 @@ export const AccountPopover = (props) => {
   const { anchorEl, onClose, open } = props;
   const signOut = useSignOut();
   const authUserData = useAuthUser();
-  const { firstname, lastname, email } = authUserData();
+  const { user } = authUserData();
+  const { firstname = "", lastname = "", name = "", email } = user;
   return (
     <Popover
       anchorEl={anchorEl}
@@ -27,7 +28,7 @@ export const AccountPopover = (props) => {
       >
         <Typography variant="overline">Account</Typography>
         <Typography color="text.secondary" variant="body2">
-          {`${firstname} ${lastname}`}
+          {name ? name : `${firstname} ${lastname}`}
         </Typography>
         <Typography color="text.secondary" variant="body2">
           {email}

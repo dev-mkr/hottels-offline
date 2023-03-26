@@ -38,7 +38,13 @@ const Page = ({ children }) => {
               },
             }}
           >
-            <CardMedia component="img" image="/assets/sea-view-bg.jpg" alt="sea view background" />
+            <CardMedia
+              component="img"
+              image="https://source.unsplash.com/random/400*700/?hotel"
+              alt="sea view background"
+              sx={{ height: "100%" }}
+            />
+            {/* <CardMedia component="img" image="/assets/sea-view-bg.jpg" alt="sea view background" /> */}
           </Grid>
         </Grid>
       </Box>

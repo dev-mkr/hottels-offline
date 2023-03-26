@@ -1,13 +1,10 @@
 import { Link } from "react-router-dom";
-import { useFormik, useFormikContext, useField } from "formik";
+import { useFormik } from "formik";
 import * as Yup from "yup";
 import {
   Box,
   Button,
-  Select,
   MenuItem,
-  InputLabel,
-  FormControl,
   Link as LinkComponent,
   Stack,
   TextField,
@@ -23,16 +20,14 @@ const Page = ({ roles, url }) => {
   const navigate = useNavigate();
   const formik = useFormik({
     initialValues: {
-      firstname: "",
-      lastname: "",
+      name: "",
       email: "",
       password: "",
       role: "",
       is_active: "0",
     },
     validationSchema: Yup.object({
-      firstname: Yup.string().max(255).required("First name is required"),
-      lastname: Yup.string().max(255).required("Last name is required"),
+      name: Yup.string().max(255).required("name is required"),
       email: Yup.string().email("Must be a valid email").max(255).required("Email is required"),
       password: Yup.string().max(255).required("Password is required"),
       role: Yup.string().required("The role is required"),
@@ -41,7 +36,7 @@ const Page = ({ roles, url }) => {
       try {
         const res = await axios.request({
           method: "POST",
-          url,
+          url: "/api/admin/register",
           headers: { "content-type": "application/json" },
           data: JSON.stringify(values),
         });
@@ -98,25 +93,16 @@ const Page = ({ roles, url }) => {
             <form noValidate onSubmit={formik.handleSubmit}>
               <Stack spacing={3}>
                 <TextField
-                  error={!!(formik.touched.firstname && formik.errors.firstname)}
+                  error={!!(formik.touched.name && formik.errors.name)}
                   fullWidth
-                  helperText={formik.touched.firstname && formik.errors.firstname}
-                  label="firstname"
-                  name="firstname"
+                  helperText={formik.touched.name && formik.errors.name}
+                  label="name"
+                  name="name"
                   onBlur={formik.handleBlur}
                   onChange={formik.handleChange}
-                  value={formik.values.firstname}
+                  value={formik.values.name}
                 />
-                <TextField
-                  error={!!(formik.touched.lastname && formik.errors.lastname)}
-                  fullWidth
-                  helperText={formik.touched.lastname && formik.errors.lastname}
-                  label="lastname"
-                  name="lastname"
-                  onBlur={formik.handleBlur}
-                  onChange={formik.handleChange}
-                  value={formik.values.lastname}
-                />
+
                 <TextField
                   error={!!(formik.touched.email && formik.errors.email)}
                   fullWidth

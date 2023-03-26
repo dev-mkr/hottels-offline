@@ -1,10 +1,9 @@
+import { useState } from "react";
+import useSWR from "swr";
 import PropTypes from "prop-types";
-import { format } from "date-fns";
 import {
-  Avatar,
   Box,
   Card,
-  Checkbox,
   Stack,
   Table,
   TableBody,
@@ -14,27 +13,42 @@ import {
   TableRow,
   Typography,
   Button,
+  CircularProgress,
 } from "@mui/material";
 import { Scrollbar } from "../../components/Scrollbar";
-import { getInitials } from "../../utils/get-initials";
+import axios from "../../api/axios";
+import { useAuthUser } from "react-auth-kit";
 
-export const CustomersTable = (props) => {
-  const {
-    count = 0,
-    items = [],
-    onDeselectAll,
-    onDeselectOne,
-    onPageChange = () => {},
-    onRowsPerPageChange,
-    onSelectAll,
-    onSelectOne,
-    page = 0,
-    rowsPerPage = 0,
-    selected = [],
-  } = props;
+const fetcher = ([url, token]) =>
+  axios({
+    url,
+    headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+  }).then((res) => res.data);
 
-  const selectedSome = selected.length > 0 && selected.length < items.length;
-  const selectedAll = items.length > 0 && selected.length === items.length;
+export const CustomersTable = () => {
+  const authUserData = useAuthUser();
+  const { authorisation, user } = authUserData();
+  const [pageIndex, setPageIndex] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const { data, error, isLoading } = useSWR(
+    [`/api/admin/hotels?page=${pageIndex}?per-page=${rowsPerPage}`, authorisation.token],
+    fetcher
+  );
+  const onPageChange = (event, value) => {
+    setPageIndex(value);
+  };
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(1);
+  };
+  if (error)
+    return (
+      <Typography sx={{ color: "red" }}>Failed to fetch {error.response.data.error}</Typography>
+    );
+  if (isLoading) return <CircularProgress sx={{ inset: "50% 50%", position: "relative" }} />;
+  const isNotDmc = ["account_owner", "hotel_director", "super_admin", "admin"].includes(user.role);
+  const isAdmin = ["account_owner", "super_admin", "admin"].includes(user.role);
+  const hotels = data.response.data;
 
   return (
     <Card>
@@ -43,53 +57,49 @@ export const CustomersTable = (props) => {
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell padding="checkbox">No</TableCell>
-                <TableCell>Name</TableCell>
-                <TableCell>Token</TableCell>
-                <TableCell>Date</TableCell>
+                <TableCell padding="checkbox" align="center">
+                  S/N
+                </TableCell>
+                <TableCell align="center">Country</TableCell>
+                <TableCell align="center">City</TableCell>
+                <TableCell align="center">Hotel</TableCell>
+                <TableCell align="center">Contracts</TableCell>
+                <TableCell align="center">Rooms</TableCell>
+                {isNotDmc && <TableCell align="center">Dmc’s</TableCell>}
+                {isAdmin && <TableCell align="center">Direct</TableCell>}
                 <TableCell>Actions</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {items.map((customer, index) => {
-                const isSelected = selected.includes(customer.id);
-                const createdAt = format(customer.createdAt, "dd/MM/yyyy");
-
+              {hotels.map((hotel) => {
                 return (
-                  <TableRow hover key={customer.id} selected={isSelected}>
-                    <TableCell padding="checkbox">
-                      {/* <Checkbox
-                        checked={isSelected}
-                        onChange={(event) => {
-                          if (event.target.checked) {
-                            onSelectOne?.(customer.id);
-                          } else {
-                            onDeselectOne?.(customer.id);
-                          }
-                        }}
-                      /> */}
-                      {index + 1}
+                  <TableRow hover key={hotel.id}>
+                    <TableCell padding="checkbox" align="center">
+                      {hotel.id}
                     </TableCell>
-                    <TableCell width="20%">
-                      <Stack alignItems="center" direction="row" spacing={2}>
-                        {/* <Avatar src={customer.avatar}>{getInitials(customer.name)}</Avatar> */}
-                        <Typography variant="subtitle2">{customer.name}</Typography>
-                      </Stack>
+                    <TableCell>
+                      <Typography variant="subtitle2" align="center">
+                        {hotel.country}
+                      </Typography>
                     </TableCell>
-                    <TableCell>{customer.phone}</TableCell>
-                    <TableCell>{createdAt}</TableCell>
+                    <TableCell align="center">{hotel.city}</TableCell>
+                    <TableCell align="center">{hotel.name}</TableCell>
+                    <TableCell align="center">{Math.floor(Math.random() * 100000)}</TableCell>
+                    <TableCell align="center">{Math.floor(Math.random() * 100000)}</TableCell>
+                    {/* <TableCell>{hotel.contracts}</TableCell>
+                    <TableCell>{hotel.rooms}</TableCell> */}
+                    {isAdmin && <TableCell align="center">{hotel.dmc}</TableCell>}
+                    {isAdmin && <TableCell>{hotel.account_owner}</TableCell>}
 
-                    <TableCell
-                      width="70%"
-                      // sx={{ display: "flex", justifyContent: "space-between" }}
-                    >
+                    <TableCell width="70%">
                       <Stack direction="row" spacing={1}>
-                        <Button variant="contained">Rooms</Button>
-                        <Button variant="contained">Contracts</Button>
-                        <Button variant="contained">assign</Button>
-                        <Button variant="contained" color="error">
-                          Delete
-                        </Button>
+                        <Button variant="contained">Manage</Button>
+                        {isAdmin && <Button variant="contained">Edit</Button>}
+                        {isAdmin && (
+                          <Button variant="contained" color="error">
+                            Archive
+                          </Button>
+                        )}
                       </Stack>
                     </TableCell>
                   </TableRow>
@@ -100,13 +110,13 @@ export const CustomersTable = (props) => {
         </Box>
       </Scrollbar>
       <TablePagination
+        rowsPerPageOptions={[10, 25]}
         component="div"
-        count={count}
+        count={data.response.meta.total}
         onPageChange={onPageChange}
-        onRowsPerPageChange={onRowsPerPageChange}
-        page={page}
+        page={pageIndex}
         rowsPerPage={rowsPerPage}
-        rowsPerPageOptions={[5, 10, 25]}
+        onRowsPerPageChange={handleChangeRowsPerPage}
       />
     </Card>
   );

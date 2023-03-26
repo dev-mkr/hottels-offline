@@ -13,14 +13,13 @@ import NotFound from "../NotFound";
 // import { OverviewTraffic } from "../sections/overview/overview-traffic";
 
 //components
-import Hotels from "./components/Hotels";
-const now = new Date();
-
-const Page = ({ children }) => (
+import Hotels from "./Hotels";
+import AddNewHotel from "./AddNewHotel";
+const Page = () => (
   <DashboardLayout>
     <Routes>
       <Route index element={<Hotels />} />
-      <Route path="/store" element={<div>store</div>} />
+      <Route path="/add-new-hotel" element={<AddNewHotel />} />
       <Route path="*" element={<NotFound />} />
     </Routes>
     {/* <Box
