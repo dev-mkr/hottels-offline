@@ -1,14 +1,8 @@
-import {
-  Checkbox,
-  FormControl,
-  FormControlLabel,
-  FormGroup,
-  Typography,
-  CircularProgress,
-} from "@mui/material";
-import axios from "../../../api/axios";
+import { Checkbox, FormControl, FormControlLabel, FormGroup, Typography } from "@mui/material";
 import { useAuthUser } from "react-auth-kit";
 import useSWR from "swr";
+import axios from "../../../api/axios";
+import Loading from "../../../components/Loading";
 
 const fetcher = ([url, token]) =>
   axios({
@@ -29,7 +23,7 @@ const FacilitiesCheckboxes = ({ handleChange }) => {
       <Typography sx={{ color: "red" }}>Failed to fetch {error.response.data.error}</Typography>
     );
 
-  if (isLoading) return <CircularProgress sx={{ inset: "50% 50%", position: "relative" }} />;
+  if (isLoading) return <Loading />;
 
   return (
     <FormControl component="fieldset">

@@ -13,7 +13,6 @@ import {
   TableRow,
   Typography,
   Button,
-  CircularProgress,
 } from "@mui/material";
 import { Scrollbar } from "../../components/Scrollbar";
 import axios from "../../api/axios";
@@ -32,7 +31,8 @@ export const CustomersTable = () => {
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const { data, error, isLoading } = useSWR(
     [`/api/admin/hotels?page=${pageIndex}?per-page=${rowsPerPage}`, authorisation.token],
-    fetcher
+    fetcher,
+    { suspense: true }
   );
   const onPageChange = (event, value) => {
     setPageIndex(value);
@@ -45,7 +45,6 @@ export const CustomersTable = () => {
     return (
       <Typography sx={{ color: "red" }}>Failed to fetch {error.response.data.error}</Typography>
     );
-  if (isLoading) return <CircularProgress sx={{ inset: "50% 50%", position: "relative" }} />;
   const isNotDmc = ["account_owner", "hotel_director", "super_admin", "admin"].includes(user.role);
   const isAdmin = ["account_owner", "super_admin", "admin"].includes(user.role);
   const hotels = data.response.data;

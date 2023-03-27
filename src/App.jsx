@@ -18,11 +18,10 @@ function App() {
       <Route path="/auth/register" element={<Register />} />
       <Route path="/auth/Admin-register" element={<AdminRegister />} />
       {/* we want to protect these routes */}
-      {/* <Route index element={<Dashboard />} /> */}
       <Route
         path="/*"
         element={
-          <RequireAuth loginPath={"/auth/login"}>
+          <RequireAuth loginPath={"/auth/Admin-login"}>
             <Dashboard />
           </RequireAuth>
         }

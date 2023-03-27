@@ -1,8 +1,5 @@
 // import { subDays, subHours } from "date-fns";
 // import { Box, Container, Unstable_Grid2 as Grid } from "@mui/material";
-import { Route, Routes } from "react-router-dom";
-import { Layout as DashboardLayout } from "../../layouts/dashboard/layout";
-import NotFound from "../NotFound";
 // import { OverviewBudget } from "../sections/overview/overview-budget";
 // import { OverviewLatestOrders } from "../sections/overview/overview-latest-orders";
 // import { OverviewLatestProducts } from "../sections/overview/overview-latest-products";
@@ -11,17 +8,25 @@ import NotFound from "../NotFound";
 // import { OverviewTotalCustomers } from "../sections/overview/overview-total-customers";
 // import { OverviewTotalProfit } from "../sections/overview/overview-total-profit";
 // import { OverviewTraffic } from "../sections/overview/overview-traffic";
-
+import { Route, Routes } from "react-router-dom";
+import { lazy, Suspense } from "react";
 //components
+import { Layout as DashboardLayout } from "../../layouts/dashboard/layout";
+import NotFound from "../NotFound";
 import Hotels from "./Hotels";
-import AddNewHotel from "./AddNewHotel";
+import Loading from "../../components/Loading";
+const AddNewHotel = lazy(() => import("./AddNewHotel"));
+
 const Page = () => (
   <DashboardLayout>
-    <Routes>
-      <Route index element={<Hotels />} />
-      <Route path="/add-new-hotel" element={<AddNewHotel />} />
-      <Route path="*" element={<NotFound />} />
-    </Routes>
+    <Suspense fallback={<Loading />}>
+      <Routes>
+        <Route index element={<Hotels />} />
+        <Route path="/add-new-hotel" element={<AddNewHotel />} />
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+    </Suspense>
+
     {/* <Box
       component="main"
       sx={{
