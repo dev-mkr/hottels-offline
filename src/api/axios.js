@@ -9,7 +9,7 @@ api.interceptors.response.use(
   (response) => response,
   (error) => {
     // whatever you want to do with the error
-    if (error.response.status === 401) return redirect("/auth/login");
+    if (error.response.status === 401) redirect("/auth/login");
   }
 );
 export const axiosWithCredentials = axios.create({
