@@ -1,6 +1,6 @@
 import Autocomplete, { usePlacesWidget } from "react-google-autocomplete";
 
-import { Formik, useFormik } from "formik";
+import { useFormik } from "formik";
 import * as Yup from "yup";
 import { Box, Button, Stack, Typography, TextField, MenuItem } from "@mui/material";
 import LoadingButton from "@mui/lab/LoadingButton";
@@ -12,23 +12,26 @@ import FacilitiesCheckboxes from "./components/FacilitiesCheckboxes";
 //   //   apiKey: import.meta.env.GOOGLE_MAPS_API_KEY,
 //   //   onPlaceSelected: (place) => console.log(place),
 //   // });
-//   // // const { ref } = usePlacesWidget({
-//   // //   apiKey: YOUR_GOOGLE_MAPS_API_KEY,
-//   // //   onPlaceSelected: (place) => console.log(place),
-//   // // });
-//   // return <TextField fullWidth color="secondary" variant="outlined" inputRef={materialRef} />;
+// // const { ref } = usePlacesWidget({
+// //   apiKey: YOUR_GOOGLE_MAPS_API_KEY,
+// //   onPlaceSelected: (place) => console.log(place),
+// // });
+// return <TextField fullWidth color="secondary" variant="outlined" inputRef={materialRef} />;
 //   // console.log(import.meta.env.VITE_API_KEY);
 //   return (
-//     <Autocomplete
-//       apiKey={"AIzaSyCdGv5cjpA0dMUCSolCf89tl_vgccGvsu0"}
-//       onPlaceSelected={(selected) => console.log(selected)}
-//     />
+// <Autocomplete
+//   apiKey={"AIzaSyCdGv5cjpA0dMUCSolCf89tl_vgccGvsu0"}
+//   onPlaceSelected={(selected) => console.log(selected)}
+// />
 //   );
 // };
 const AddNewHotel = () => {
+  const { ref } = usePlacesWidget({
+    apiKey: `${import.meta.env.VITE_API_KEY}`,
+    onPlaceSelected: (place) => console.log(place),
+  });
   const [selectedImage, setSelectedImage] = useState();
   const [isImgUpload, setIsImgUpload] = useState(false);
-
   const uploadImage = () => {
     const formData = new FormData();
     formData.append("file", selectedImage[0]);
@@ -110,6 +113,7 @@ const AddNewHotel = () => {
         <form noValidate onSubmit={formik.handleSubmit}>
           <Stack spacing={3}>
             <Typography variant="h4">Add a new Hotel</Typography>
+            <TextField fullWidth color="secondary" variant="outlined" inputRef={ref} />
             <TextField
               error={!!(formik.touched.name && formik.errors.name)}
               fullWidth

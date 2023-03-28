@@ -29,7 +29,7 @@ export const CustomersTable = () => {
   const { authorisation, user } = authUserData();
   const [pageIndex, setPageIndex] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
-  const { data, error, isLoading } = useSWR(
+  const { data, error } = useSWR(
     [`/api/admin/hotels?page=${pageIndex}?per-page=${rowsPerPage}`, authorisation.token],
     fetcher,
     { suspense: true }
@@ -41,13 +41,50 @@ export const CustomersTable = () => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(1);
   };
+
   if (error)
     return (
       <Typography sx={{ color: "red" }}>Failed to fetch {error.response.data.error}</Typography>
     );
+
   const isNotDmc = ["account_owner", "hotel_director", "super_admin", "admin"].includes(user.role);
   const isAdmin = ["account_owner", "super_admin", "admin"].includes(user.role);
-  const hotels = data.response.data;
+  const hotels = data.response.data.map(({ id, country, city, name }) => {
+    return (
+      <TableRow hover key={id}>
+        <TableCell padding="checkbox" align="center">
+          {id}
+        </TableCell>
+        <TableCell>
+          <Typography variant="subtitle2" align="center">
+            {country}
+          </Typography>
+        </TableCell>
+        <TableCell align="center">{city}</TableCell>
+        <TableCell align="center">{name}</TableCell>
+        <TableCell align="center">{Math.floor(Math.random() * 100000)}</TableCell>
+        <TableCell align="center">{Math.floor(Math.random() * 100000)}</TableCell>
+        <TableCell align="center">{Math.floor(Math.random() * 100000)}</TableCell>
+        <TableCell align="center">{Math.floor(Math.random() * 100000)}</TableCell>
+        {/* <TableCell>{contracts}</TableCell>
+        <TableCell>{rooms}</TableCell> */}
+        {/* {isAdmin && <TableCell align="center">{dmc}</TableCell>} */}
+        {/* {isAdmin && <TableCell>{account_owner}</TableCell>} */}
+
+        <TableCell width="70%">
+          <Stack direction="row" spacing={1}>
+            <Button variant="contained">Manage</Button>
+            {isAdmin && <Button variant="contained">Edit</Button>}
+            {isAdmin && (
+              <Button variant="contained" color="error">
+                Archive
+              </Button>
+            )}
+          </Stack>
+        </TableCell>
+      </TableRow>
+    );
+  });
 
   return (
     <Card>
@@ -69,42 +106,7 @@ export const CustomersTable = () => {
                 <TableCell>Actions</TableCell>
               </TableRow>
             </TableHead>
-            <TableBody>
-              {hotels.map((hotel) => {
-                return (
-                  <TableRow hover key={hotel.id}>
-                    <TableCell padding="checkbox" align="center">
-                      {hotel.id}
-                    </TableCell>
-                    <TableCell>
-                      <Typography variant="subtitle2" align="center">
-                        {hotel.country}
-                      </Typography>
-                    </TableCell>
-                    <TableCell align="center">{hotel.city}</TableCell>
-                    <TableCell align="center">{hotel.name}</TableCell>
-                    <TableCell align="center">{Math.floor(Math.random() * 100000)}</TableCell>
-                    <TableCell align="center">{Math.floor(Math.random() * 100000)}</TableCell>
-                    {/* <TableCell>{hotel.contracts}</TableCell>
-                    <TableCell>{hotel.rooms}</TableCell> */}
-                    {isAdmin && <TableCell align="center">{hotel.dmc}</TableCell>}
-                    {isAdmin && <TableCell>{hotel.account_owner}</TableCell>}
-
-                    <TableCell width="70%">
-                      <Stack direction="row" spacing={1}>
-                        <Button variant="contained">Manage</Button>
-                        {isAdmin && <Button variant="contained">Edit</Button>}
-                        {isAdmin && (
-                          <Button variant="contained" color="error">
-                            Archive
-                          </Button>
-                        )}
-                      </Stack>
-                    </TableCell>
-                  </TableRow>
-                );
-              })}
-            </TableBody>
+            <TableBody>{hotels}</TableBody>
           </Table>
         </Box>
       </Scrollbar>
