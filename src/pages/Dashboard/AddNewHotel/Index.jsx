@@ -1,4 +1,4 @@
-import Autocomplete, { usePlacesWidget } from "react-google-autocomplete";
+import { useAuthUser } from "react-auth-kit";
 
 import { useFormik } from "formik";
 import * as Yup from "yup";
@@ -7,31 +7,15 @@ import LoadingButton from "@mui/lab/LoadingButton";
 import axios from "axios";
 import { useState } from "react";
 import FacilitiesCheckboxes from "./components/FacilitiesCheckboxes";
-// const AddNewHotel = () => {
-//   // const { ref: materialRef } = usePlacesWidget({
-//   //   apiKey: import.meta.env.GOOGLE_MAPS_API_KEY,
-//   //   onPlaceSelected: (place) => console.log(place),
-//   // });
-// // const { ref } = usePlacesWidget({
-// //   apiKey: YOUR_GOOGLE_MAPS_API_KEY,
-// //   onPlaceSelected: (place) => console.log(place),
-// // });
-// return <TextField fullWidth color="secondary" variant="outlined" inputRef={materialRef} />;
-//   // console.log(import.meta.env.VITE_API_KEY);
-//   return (
-// <Autocomplete
-//   apiKey={"AIzaSyCdGv5cjpA0dMUCSolCf89tl_vgccGvsu0"}
-//   onPlaceSelected={(selected) => console.log(selected)}
-// />
-//   );
-// };
+import GoogleMapsInput from "./components/GoogleMapsInput";
+
 const AddNewHotel = () => {
-  const { ref } = usePlacesWidget({
-    apiKey: `${import.meta.env.VITE_API_KEY}`,
-    onPlaceSelected: (place) => console.log(place),
-  });
+  const authUserData = useAuthUser();
+  const { authorisation, user } = authUserData();
+
   const [selectedImage, setSelectedImage] = useState();
   const [isImgUpload, setIsImgUpload] = useState(false);
+
   const uploadImage = () => {
     const formData = new FormData();
     formData.append("file", selectedImage[0]);
@@ -51,13 +35,20 @@ const AddNewHotel = () => {
       name: "",
       city: "",
       country: "",
+      location: "",
+      latitude: "",
+      longitude: "",
       description: "",
       stars: "",
       image: null,
       facilities: [],
+      admin_id: user.id,
     },
     validationSchema: Yup.object({
       name: Yup.string().max(255).required("Hotel name is required"),
+      location: Yup.string().max(255).required("Hotel location is required"),
+      latitude: Yup.number().max(255).required("latitude location is required"),
+      longitude: Yup.number().max(255).required("longtude location is required"),
       city: Yup.string().max(255).required("City is required"),
       country: Yup.string().max(255).required("Country name is required"),
       description: Yup.string().max(2000).required("Description is required"),
@@ -67,7 +58,10 @@ const AddNewHotel = () => {
         const res = await axios.request({
           method: "POST",
           // url,
-          headers: { "content-type": "application/json" },
+          headers: {
+            "content-type": "application/json",
+            Authorization: `Bearer ${authorisation.token}`,
+          },
           data: JSON.stringify(values),
         });
 
@@ -113,18 +107,30 @@ const AddNewHotel = () => {
         <form noValidate onSubmit={formik.handleSubmit}>
           <Stack spacing={3}>
             <Typography variant="h4">Add a new Hotel</Typography>
-            <TextField fullWidth color="secondary" variant="outlined" inputRef={ref} />
-            <TextField
-              error={!!(formik.touched.name && formik.errors.name)}
-              fullWidth
-              helperText={formik.touched.name && formik.errors.name}
-              label="Hotel name"
-              name="name"
-              onBlur={formik.handleBlur}
-              onChange={formik.handleChange}
-              type="name"
-              value={formik.values.name}
-            />
+            <GoogleMapsInput setFieldValue={formik.setFieldValue} />
+            <Stack sx={{ display: "flex", flexDirection: "row", columnGap: 1 }}>
+              <TextField
+                error={!!(formik.touched.latitude && formik.errors.latitude)}
+                fullWidth
+                helperText={formik.touched.latitude && formik.errors.latitude}
+                label="latitude"
+                name="latitude"
+                onBlur={formik.handleBlur}
+                onChange={formik.handleChange}
+                value={formik.values.latitude}
+              />
+              <TextField
+                error={!!(formik.touched.longitude && formik.errors.longitude)}
+                fullWidth
+                helperText={formik.touched.longitude && formik.errors.longitude}
+                label="longitude"
+                name="longitude"
+                onBlur={formik.handleBlur}
+                onChange={formik.handleChange}
+                value={formik.values.longitude}
+              />
+            </Stack>
+
             <TextField
               error={!!(formik.touched.city && formik.errors.city)}
               fullWidth
@@ -133,7 +139,6 @@ const AddNewHotel = () => {
               name="city"
               onBlur={formik.handleBlur}
               onChange={formik.handleChange}
-              type="city"
               value={formik.values.city}
             />
             <TextField
@@ -144,8 +149,17 @@ const AddNewHotel = () => {
               name="country"
               onBlur={formik.handleBlur}
               onChange={formik.handleChange}
-              type="country"
               value={formik.values.country}
+            />
+            <TextField
+              error={!!(formik.touched.location && formik.errors.location)}
+              fullWidth
+              helperText={formik.touched.location && formik.errors.location}
+              label="Full Hotel location"
+              name="location"
+              onBlur={formik.handleBlur}
+              onChange={formik.handleChange}
+              value={formik.values.location}
             />
             <TextField
               error={!!(formik.touched.description && formik.errors.description)}
