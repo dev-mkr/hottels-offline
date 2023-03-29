@@ -15,7 +15,7 @@ import { Layout as DashboardLayout } from "../../layouts/dashboard/layout";
 import NotFound from "../NotFound";
 import Hotels from "./Hotels";
 import Loading from "../../components/Loading";
-const AddNewHotel = lazy(() => import("./AddNewHotel"));
+const AddNewHotel = lazy(() => import("./AddNewHotel/Index"));
 
 const Page = () => (
   <DashboardLayout>

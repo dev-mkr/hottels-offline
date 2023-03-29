@@ -37,7 +37,6 @@ export const HotelsTable = () => {
     fetcher,
     { suspense: true }
   );
-  const [dmcsAssignedToHotel, setDmcsAssignedToHotel] = useState();
   const onPageChange = (event, value) => {
     setPageIndex(value);
   };
