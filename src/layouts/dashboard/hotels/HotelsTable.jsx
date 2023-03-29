@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, lazy } from "react";
 import useSWR from "swr";
 import PropTypes from "prop-types";
 import {
@@ -14,9 +14,12 @@ import {
   Typography,
   Button,
 } from "@mui/material";
-import { Scrollbar } from "../../components/Scrollbar";
-import axios from "../../api/axios";
+import axios from "src/api/axios";
 import { useAuthUser } from "react-auth-kit";
+//components
+import { Scrollbar } from "src/components/Scrollbar";
+import ManageHotel from "./ManageHotel/Index";
+const HotelDmcPopover = lazy(() => import("src/layouts/dashboard/hotels/HotelDmcPopover"));
 
 const fetcher = ([url, token]) =>
   axios({
@@ -24,7 +27,7 @@ const fetcher = ([url, token]) =>
     headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
   }).then((res) => res.data);
 
-export const CustomersTable = () => {
+export const HotelsTable = () => {
   const authUserData = useAuthUser();
   const { authorisation, user } = authUserData();
   const [pageIndex, setPageIndex] = useState(0);
@@ -34,6 +37,7 @@ export const CustomersTable = () => {
     fetcher,
     { suspense: true }
   );
+  const [dmcsAssignedToHotel, setDmcsAssignedToHotel] = useState();
   const onPageChange = (event, value) => {
     setPageIndex(value);
   };
@@ -49,6 +53,7 @@ export const CustomersTable = () => {
 
   const isNotDmc = ["account_owner", "hotel_director", "super_admin", "admin"].includes(user.role);
   const isAdmin = ["account_owner", "super_admin", "admin"].includes(user.role);
+
   const hotels = data.response.data.map(({ id, country, city, name }) => {
     return (
       <TableRow hover key={id}>
@@ -62,18 +67,26 @@ export const CustomersTable = () => {
         </TableCell>
         <TableCell align="center">{city}</TableCell>
         <TableCell align="center">{name}</TableCell>
-        <TableCell align="center">{Math.floor(Math.random() * 100000)}</TableCell>
-        <TableCell align="center">{Math.floor(Math.random() * 100000)}</TableCell>
-        <TableCell align="center">{Math.floor(Math.random() * 100000)}</TableCell>
-        <TableCell align="center">{Math.floor(Math.random() * 100000)}</TableCell>
-        {/* <TableCell>{contracts}</TableCell>
-        <TableCell>{rooms}</TableCell> */}
-        {/* {isAdmin && <TableCell align="center">{dmc}</TableCell>} */}
-        {/* {isAdmin && <TableCell>{account_owner}</TableCell>} */}
+        <TableCell align="center" name="contracts">
+          {Math.floor(Math.random() * 100000)}
+        </TableCell>
+        <TableCell align="center" name="rooms">
+          {Math.floor(Math.random() * 100000)}
+        </TableCell>
+        {isAdmin && (
+          <TableCell align="center" name="dmc">
+            <HotelDmcPopover HotelId={id} />
+          </TableCell>
+        )}
+        {isAdmin && (
+          <TableCell align="center" neme="direct">
+            {2}
+          </TableCell>
+        )}
 
         <TableCell width="70%">
           <Stack direction="row" spacing={1}>
-            <Button variant="contained">Manage</Button>
+            <ManageHotel />
             {isAdmin && <Button variant="contained">Edit</Button>}
             {isAdmin && (
               <Button variant="contained" color="error">
@@ -123,7 +136,7 @@ export const CustomersTable = () => {
   );
 };
 
-CustomersTable.propTypes = {
+HotelsTable.propTypes = {
   count: PropTypes.number,
   items: PropTypes.array,
   onDeselectAll: PropTypes.func,

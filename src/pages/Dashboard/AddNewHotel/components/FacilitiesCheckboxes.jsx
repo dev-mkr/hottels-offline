@@ -1,8 +1,8 @@
 import { Checkbox, FormControl, FormControlLabel, FormGroup, Typography } from "@mui/material";
 import { useAuthUser } from "react-auth-kit";
 import useSWR from "swr";
-import axios from "../../../api/axios";
-import Loading from "../../../components/Loading";
+import axios from "src/api/axios";
+import Loading from "src/components/Loading";
 
 const fetcher = ([url, token]) =>
   axios({

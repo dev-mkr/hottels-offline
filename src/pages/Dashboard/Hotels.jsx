@@ -5,7 +5,7 @@ import PlusIcon from "@heroicons/react/24/solid/PlusIcon";
 import { Box, Button, Container, Stack, SvgIcon, Typography } from "@mui/material";
 // import { useSelection } from "../../../hooks/use-selection";
 // import { Layout as DashboardLayout } from "src/layouts/dashboard/layout";
-import { CustomersTable } from "../../sections/customer/Customers-table";
+import { HotelsTable } from "../../layouts/dashboard/hotels/HotelsTable";
 import { CustomersSearch } from "../../sections/customer/Customers-search";
 import { Link } from "react-router-dom";
 const Page = () => {
@@ -38,7 +38,7 @@ const Page = () => {
               </Link>
             </Stack>
             <CustomersSearch />
-            <CustomersTable />
+            <HotelsTable />
           </Stack>
         </Container>
       </Box>
