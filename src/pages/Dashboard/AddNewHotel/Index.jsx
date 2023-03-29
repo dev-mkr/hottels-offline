@@ -38,6 +38,7 @@ const AddNewHotel = () => {
       location: "",
       latitude: "",
       longitude: "",
+      code: "",
       description: "",
       stars: "",
       image: null,
@@ -47,6 +48,7 @@ const AddNewHotel = () => {
     validationSchema: Yup.object({
       name: Yup.string().max(255).required("Hotel name is required"),
       location: Yup.string().max(255).required("Hotel location is required"),
+      code: Yup.number().max(255).required("code is required"),
       latitude: Yup.number().max(255).required("latitude location is required"),
       longitude: Yup.number().max(255).required("longtude location is required"),
       city: Yup.string().max(255).required("City is required"),
@@ -160,6 +162,16 @@ const AddNewHotel = () => {
               onBlur={formik.handleBlur}
               onChange={formik.handleChange}
               value={formik.values.location}
+            />
+            <TextField
+              error={!!(formik.touched.code && formik.errors.code)}
+              fullWidth
+              helperText={formik.touched.code && formik.errors.code}
+              label="S/N"
+              name="S/N"
+              onBlur={formik.handleBlur}
+              onChange={formik.handleChange}
+              value={formik.values.code}
             />
             <TextField
               error={!!(formik.touched.description && formik.errors.description)}
