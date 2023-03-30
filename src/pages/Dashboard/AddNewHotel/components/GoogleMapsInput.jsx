@@ -4,7 +4,7 @@ import { useState } from "react";
 
 function extractLocationInfo(locationObject, setFieldValue) {
   // Extracting the address components
-  const addressComponents = locationObject.address_components;
+  const addressComponents = locationObject?.address_components;
 
   // Initializing variables for storing the extracted information
   let country = null;

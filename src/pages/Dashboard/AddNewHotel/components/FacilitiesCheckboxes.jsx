@@ -14,7 +14,7 @@ const FacilitiesCheckboxes = ({ handleChange }) => {
   const authUserData = useAuthUser();
   const { authorisation } = authUserData();
   const { data, error, isLoading } = useSWR(
-    [`/api/admin/facilities`, authorisation.token],
+    [`/api/admin/data/categories?type=facilities`, authorisation.token],
     fetcher
   );
 
@@ -24,6 +24,7 @@ const FacilitiesCheckboxes = ({ handleChange }) => {
     );
 
   if (isLoading) return <Loading />;
+  console.log(data);
 
   return (
     <FormControl component="fieldset">

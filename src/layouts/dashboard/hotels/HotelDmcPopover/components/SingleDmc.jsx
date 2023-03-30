@@ -1,0 +1,36 @@
+import { useState } from "react";
+import { Stack, TableCell, TableRow, Typography, Button } from "@mui/material";
+import deleteDmc from "../helpers/deleteDmc";
+
+const SingleDmc = ({ name, email, id, hotelId, token }) => {
+  const [isDeleted, setIsDeleted] = useState(false);
+
+  return (
+    <TableRow hover key={id}>
+      <TableCell padding="checkbox" align="center">
+        {id}
+      </TableCell>
+      <TableCell>
+        <Typography variant="subtitle2" align="center">
+          {name}
+        </Typography>
+      </TableCell>
+      <TableCell align="center">{email}</TableCell>
+
+      <TableCell width="50%">
+        <Stack direction="row" spacing={1}>
+          <Button
+            variant="contained"
+            color="error"
+            disabled={isDeleted}
+            onClick={() => deleteDmc(hotelId, id, token, setIsDeleted)}
+          >
+            {isDeleted ? "Deleted!" : "Delete"}
+          </Button>
+        </Stack>
+      </TableCell>
+    </TableRow>
+  );
+};
+
+export default SingleDmc;

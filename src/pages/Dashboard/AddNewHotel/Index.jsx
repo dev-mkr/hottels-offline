@@ -4,10 +4,12 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import { Box, Button, Stack, Typography, TextField, MenuItem } from "@mui/material";
 import LoadingButton from "@mui/lab/LoadingButton";
+// import axios from "src/api/axios";
 import axios from "axios";
 import { useState } from "react";
 import FacilitiesCheckboxes from "./components/FacilitiesCheckboxes";
 import GoogleMapsInput from "./components/GoogleMapsInput";
+import { redirect } from "react-router-dom";
 
 const AddNewHotel = () => {
   const authUserData = useAuthUser();
@@ -42,24 +44,25 @@ const AddNewHotel = () => {
       description: "",
       stars: "",
       image: null,
-      facilities: [],
+      facilities: [1],
       admin_id: user.id,
     },
     validationSchema: Yup.object({
       name: Yup.string().max(255).required("Hotel name is required"),
       location: Yup.string().max(255).required("Hotel location is required"),
-      code: Yup.number().max(255).required("code is required"),
-      latitude: Yup.number().max(255).required("latitude location is required"),
-      longitude: Yup.number().max(255).required("longtude location is required"),
+      code: Yup.number().required("code is required"),
+      latitude: Yup.number().required("latitude location is required"),
+      longitude: Yup.number().required("longtude location is required"),
       city: Yup.string().max(255).required("City is required"),
       country: Yup.string().max(255).required("Country name is required"),
       description: Yup.string().max(2000).required("Description is required"),
     }),
     onSubmit: async (values, helpers) => {
+      console.log("clicked");
       try {
         const res = await axios.request({
           method: "POST",
-          // url,
+          url: "https://edu-garage.com/api/admin/hotels",
           headers: {
             "content-type": "application/json",
             Authorization: `Bearer ${authorisation.token}`,
@@ -67,11 +70,14 @@ const AddNewHotel = () => {
           data: JSON.stringify(values),
         });
 
-        if (res.status === 200) {
+        console.log(res);
+        if (res?.status === 200) {
+          return redirect("/");
         }
       } catch (err) {
+        console.log(err.response);
         helpers.setStatus({ success: false });
-        helpers.setErrors({ submit: err.response.data.message });
+        helpers.setErrors({ submit: String(err.response.data.message) });
         helpers.setSubmitting(false);
       }
     },
@@ -117,6 +123,7 @@ const AddNewHotel = () => {
                 helperText={formik.touched.latitude && formik.errors.latitude}
                 label="latitude"
                 name="latitude"
+                type="number"
                 onBlur={formik.handleBlur}
                 onChange={formik.handleChange}
                 value={formik.values.latitude}
@@ -127,11 +134,23 @@ const AddNewHotel = () => {
                 helperText={formik.touched.longitude && formik.errors.longitude}
                 label="longitude"
                 name="longitude"
+                type="number"
                 onBlur={formik.handleBlur}
                 onChange={formik.handleChange}
                 value={formik.values.longitude}
               />
             </Stack>
+
+            <TextField
+              error={!!(formik.touched.name && formik.errors.name)}
+              fullWidth
+              helperText={formik.touched.name && formik.errors.name}
+              label="Hotel name"
+              name="name"
+              onBlur={formik.handleBlur}
+              onChange={formik.handleChange}
+              value={formik.values.name}
+            />
 
             <TextField
               error={!!(formik.touched.city && formik.errors.city)}
@@ -168,7 +187,8 @@ const AddNewHotel = () => {
               fullWidth
               helperText={formik.touched.code && formik.errors.code}
               label="S/N"
-              name="S/N"
+              name="code"
+              type="number"
               onBlur={formik.handleBlur}
               onChange={formik.handleChange}
               value={formik.values.code}
@@ -202,7 +222,9 @@ const AddNewHotel = () => {
               ))}
             </TextField>
             <Box sx={{ display: "flex", alignItems: "center", columnGap: "10px" }}>
-              <Typography variant="subtitle1">Upload an image</Typography>
+              <Typography variant="subtitle1" color={!formik.values.image && "red"}>
+                Upload an image
+              </Typography>
               <input
                 accept="image/*"
                 multiple
@@ -222,14 +244,14 @@ const AddNewHotel = () => {
                 {!formik.errors.image && formik.values.image ? "Success" : "Upload"}
               </LoadingButton>
             </Box>
-            <FacilitiesCheckboxes handleChange={handleFacilitiesChange} />
+            {/* <FacilitiesCheckboxes handleChange={handleFacilitiesChange} /> */}
           </Stack>
           {formik.errors.submit && (
             <Typography color="error" sx={{ mt: 3 }} variant="body2">
               {formik.errors.submit}
             </Typography>
           )}
-          <Button fullWidth size="large" sx={{ mt: 3 }} type="submit" variant="contained" disabled>
+          <Button fullWidth size="large" sx={{ mt: 3 }} type="submit" variant="contained">
             Submit
           </Button>
         </form>

@@ -18,8 +18,9 @@ import axios from "src/api/axios";
 import { useAuthUser } from "react-auth-kit";
 //components
 import { Scrollbar } from "src/components/Scrollbar";
-import ManageHotel from "./ManageHotel/Index";
-const HotelDmcPopover = lazy(() => import("src/layouts/dashboard/hotels/HotelDmcPopover"));
+import { Link } from "react-router-dom";
+const EditHotel = lazy(() => import("../EditHotel"));
+const HotelDmcPopover = lazy(() => import("../HotelDmcPopover"));
 
 const fetcher = ([url, token]) =>
   axios({
@@ -42,7 +43,7 @@ export const HotelsTable = () => {
   };
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(1);
+    setPageIndex(1);
   };
 
   if (error)
@@ -53,7 +54,8 @@ export const HotelsTable = () => {
   const isNotDmc = ["account_owner", "hotel_director", "super_admin", "admin"].includes(user.role);
   const isAdmin = ["account_owner", "super_admin", "admin"].includes(user.role);
 
-  const hotels = data.response.data.map(({ id, country, city, name }) => {
+  const hotels = data.response.data.map((props) => {
+    const { id, country, city, name } = props;
     return (
       <TableRow hover key={id}>
         <TableCell padding="checkbox" align="center">
@@ -74,7 +76,7 @@ export const HotelsTable = () => {
         </TableCell>
         {isAdmin && (
           <TableCell align="center" name="dmc">
-            <HotelDmcPopover HotelId={id} />
+            <HotelDmcPopover hotelId={id} token={authorisation.token} />
           </TableCell>
         )}
         {isAdmin && (
@@ -85,8 +87,14 @@ export const HotelsTable = () => {
 
         <TableCell width="70%">
           <Stack direction="row" spacing={1}>
-            <ManageHotel />
-            {isAdmin && <Button variant="contained">Edit</Button>}
+            <Link
+              to={`/manage-hotel/${id}`}
+              style={{ textDecoration: "none" }}
+              state={{ hotelName: name }}
+            >
+              <Button variant="contained">Manage</Button>
+            </Link>
+            {isAdmin && <EditHotel {...props} />}
             {isAdmin && (
               <Button variant="contained" color="error">
                 Archive

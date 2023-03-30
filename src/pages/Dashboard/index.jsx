@@ -15,7 +15,8 @@ import { Layout as DashboardLayout } from "../../layouts/dashboard/layout";
 import NotFound from "../NotFound";
 import Hotels from "./Hotels";
 import Loading from "../../components/Loading";
-const AddNewHotel = lazy(() => import("./AddNewHotel/Index"));
+const AddNewHotel = lazy(() => import("./AddNewHotel"));
+const ManageHotel = lazy(() => import("./ManageHotel"));
 
 const Page = () => (
   <DashboardLayout>
@@ -23,6 +24,7 @@ const Page = () => (
       <Routes>
         <Route index element={<Hotels />} />
         <Route path="/add-new-hotel" element={<AddNewHotel />} />
+        <Route path="/manage-hotel/:hotelId" element={<ManageHotel />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </Suspense>
