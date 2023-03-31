@@ -53,7 +53,7 @@ export default function HotelDmcPopover({ hotelId, token }) {
     setPageIndex(1);
   };
 
-  const { data, error, isLoading } = useSWR(
+  const { data, error, isLoading, mutate } = useSWR(
     [`/api/admin/hotels/${hotelId}/dmc?page=${pageIndex}?per-page=${rowsPerPage}`, token],
     fetcher
   );
@@ -65,7 +65,17 @@ export default function HotelDmcPopover({ hotelId, token }) {
 
   if (isLoading) return <Loading />;
   const dmcs = data.response.data.map(({ name, email, id }) => {
-    return <SingleDmc key={id} name={name} email={email} id={id} hotelId={hotelId} token={token} />;
+    return (
+      <SingleDmc
+        key={id}
+        name={name}
+        mutate={mutate}
+        email={email}
+        id={id}
+        hotelId={hotelId}
+        token={token}
+      />
+    );
   });
 
   return (

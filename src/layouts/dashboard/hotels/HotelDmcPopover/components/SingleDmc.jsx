@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Stack, TableCell, TableRow, Typography, Button } from "@mui/material";
 import deleteDmc from "../helpers/deleteDmc";
 
-const SingleDmc = ({ name, email, id, hotelId, token }) => {
+const SingleDmc = ({ name, email, id, hotelId, token, mutate }) => {
   const [isDeleted, setIsDeleted] = useState(false);
 
   return (
@@ -23,7 +23,7 @@ const SingleDmc = ({ name, email, id, hotelId, token }) => {
             variant="contained"
             color="error"
             disabled={isDeleted}
-            onClick={() => deleteDmc(hotelId, id, token, setIsDeleted)}
+            onClick={() => deleteDmc(hotelId, id, token, setIsDeleted, mutate)}
           >
             {isDeleted ? "Deleted!" : "Delete"}
           </Button>

@@ -1,6 +1,6 @@
 import axios from "src/api/axios";
 
-const deleteDmc = async (hotelId, dmcId, token, setIsDeleted) => {
+const deleteDmc = async (hotelId, dmcId, token, setIsDeleted, mutate) => {
   try {
     const form = new FormData();
     form.append("_method", "DELETE");
@@ -17,6 +17,8 @@ const deleteDmc = async (hotelId, dmcId, token, setIsDeleted) => {
     });
     if (res.status === 200) {
       setIsDeleted(true);
+      console.log("mutate is running");
+      mutate();
     }
   } catch (err) {
     setIsDeleted(false);
