@@ -14,7 +14,7 @@ export const SideNavItem = (props) => {
         }
       : {
           component: Link,
-          href: path,
+          to: path,
         }
     : {};
 
