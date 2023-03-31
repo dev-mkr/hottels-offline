@@ -21,7 +21,7 @@ const ManageHotel = () => {
       >
         <Container maxWidth="xl">
           <Stack spacing={3}>
-            <Typography variant="h4">Manage {location.state.hotelName}</Typography>
+            <Typography variant="h4">Manage {location.state?.hotelName}</Typography>
 
             {/* handel role here */}
             <AddDmc token={authorisation.token} hotelId={hotelId} />
