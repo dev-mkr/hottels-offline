@@ -80,7 +80,7 @@ export default function HotelDmcPopover({ hotelId, token }) {
 
   return (
     <div>
-      <Button onClick={handleOpen}>Open</Button>
+      <Button onClick={handleOpen}>{data.response.data.length}</Button>
       <Modal
         open={open}
         onClose={handleClose}
