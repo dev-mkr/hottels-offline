@@ -28,7 +28,7 @@ const AddDmc = ({ token, hotelId }) => {
   const [pageIndex, setPageIndex] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const { data, error } = useSWR(
-    [`/api/users/unique/dmc?allowed-types=dmc?page=${pageIndex}?per-page=${rowsPerPage}`, token],
+    [`/api/users/unique/dmc?allowed-types=dmc&page=${pageIndex}&per-page=${rowsPerPage}`, token],
     fetcher,
     { suspense: true }
   );
@@ -76,7 +76,7 @@ const AddDmc = ({ token, hotelId }) => {
           </Box>
         </Scrollbar>
         <TablePagination
-          rowsPerPageOptions={[10, 25]}
+          rowsPerPageOptions={[]}
           component="div"
           count={data.response.meta.total}
           onPageChange={onPageChange}

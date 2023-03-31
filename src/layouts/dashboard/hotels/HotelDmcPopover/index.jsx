@@ -44,7 +44,7 @@ export default function HotelDmcPopover({ hotelId, token }) {
   const handleClose = () => setOpen(false);
 
   const [pageIndex, setPageIndex] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [rowsPerPage, setRowsPerPage] = useState(20);
   const onPageChange = (event, value) => {
     setPageIndex(value);
   };
@@ -54,7 +54,7 @@ export default function HotelDmcPopover({ hotelId, token }) {
   };
 
   const { data, error, isLoading, mutate } = useSWR(
-    [`/api/admin/hotels/${hotelId}/dmc?page=${pageIndex}?per-page=${rowsPerPage}`, token],
+    [`/api/admin/hotels/${hotelId}/dmc?page=${pageIndex}&per-page=${rowsPerPage}`, token],
     fetcher
   );
 
@@ -108,7 +108,7 @@ export default function HotelDmcPopover({ hotelId, token }) {
               </Box>
             </Scrollbar>
             <TablePagination
-              rowsPerPageOptions={[10, 25]}
+              rowsPerPageOptions={[]}
               component="div"
               count={data.response.meta.total}
               onPageChange={onPageChange}

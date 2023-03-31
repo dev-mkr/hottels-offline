@@ -35,7 +35,7 @@ export const HotelsTable = () => {
   const [pageIndex, setPageIndex] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const { data, error, mutate } = useSWR(
-    [`/api/admin/hotels?page=${pageIndex}?per-page=${rowsPerPage}`, authorisation.token],
+    [`/api/admin/hotels?page=${pageIndex}&per-page=${rowsPerPage}`, authorisation.token],
     fetcher,
     { suspense: true }
   );
@@ -135,7 +135,7 @@ export const HotelsTable = () => {
         </Box>
       </Scrollbar>
       <TablePagination
-        rowsPerPageOptions={[10, 25]}
+        rowsPerPageOptions={[]}
         component="div"
         count={data.response.meta.total}
         onPageChange={onPageChange}
