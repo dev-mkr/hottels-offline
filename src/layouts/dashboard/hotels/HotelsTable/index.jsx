@@ -34,7 +34,7 @@ export const HotelsTable = () => {
   const { authorisation, user } = authUserData();
   const [pageIndex, setPageIndex] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
-  const { data, error } = useSWR(
+  const { data, error, mutate } = useSWR(
     [`/api/admin/hotels?page=${pageIndex}?per-page=${rowsPerPage}`, authorisation.token],
     fetcher,
     { suspense: true }
@@ -96,7 +96,14 @@ export const HotelsTable = () => {
               <Button variant="contained">Manage</Button>
             </Link>
             {isAdmin && <EditHotel {...props} />}
-            {isAdmin && <DeleteHotel hotelName={name} hotelId={id} token={authorisation.token} />}
+            {isAdmin && (
+              <DeleteHotel
+                hotelName={name}
+                hotelId={id}
+                token={authorisation.token}
+                mutate={mutate}
+              />
+            )}
           </Stack>
         </TableCell>
       </TableRow>

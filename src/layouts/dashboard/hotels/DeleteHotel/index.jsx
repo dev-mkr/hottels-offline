@@ -19,7 +19,7 @@ const style = {
   justifyContent: "space-between",
 };
 
-const DeleteHotel = ({ hotelName, hotelId, token }) => {
+const DeleteHotel = ({ hotelName, hotelId, token, mutate }) => {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -37,7 +37,10 @@ const DeleteHotel = ({ hotelName, hotelId, token }) => {
         },
         data: data,
       })
-      .then((res) => res?.status === 200 && handleClose());
+      .then((res) => {
+        res?.status === 200 && handleClose();
+        mutate();
+      });
   };
 
   return (
