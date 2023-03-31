@@ -1,5 +1,7 @@
 import { useState } from "react";
-import { Button, Typography, Modal, Alert, Card } from "@mui/material";
+import { Button, MenuItem, Modal, Alert, Card } from "@mui/material";
+import ArchiveIcon from "@mui/icons-material/Archive";
+
 import axios from "src/api/axios";
 
 const style = {
@@ -45,9 +47,11 @@ const DeleteHotel = ({ hotelName, hotelId, token, mutate }) => {
 
   return (
     <>
-      <Button variant="contained" color="error" onClick={handleOpen}>
+      <MenuItem disableRipple onClick={handleOpen}>
+        <ArchiveIcon />
         Archive
-      </Button>
+      </MenuItem>
+
       <Modal
         open={open}
         onClose={handleClose}

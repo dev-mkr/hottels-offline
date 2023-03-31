@@ -42,6 +42,8 @@ const AddNewHotel = () => {
       longitude: "",
       code: "",
       description: "",
+      owner_name: "",
+      source_api: null,
       stars: "",
       image: null,
       facilities: [1],
@@ -55,6 +57,7 @@ const AddNewHotel = () => {
       longitude: Yup.number().required("longtude location is required"),
       city: Yup.string().max(255).required("City is required"),
       country: Yup.string().max(255).required("Country name is required"),
+      owner_name: Yup.string().max(255).required("Owner name is required"),
       description: Yup.string().max(2000).required("Description is required"),
     }),
     onSubmit: async (values, helpers) => {
@@ -188,6 +191,26 @@ const AddNewHotel = () => {
               onBlur={formik.handleBlur}
               onChange={formik.handleChange}
               value={formik.values.code}
+            />
+            <TextField
+              error={!!(formik.touched.owner_name && formik.errors.owner_name)}
+              fullWidth
+              helperText={formik.touched.owner_name && formik.errors.owner_name}
+              label="Owner name"
+              name="owner_name"
+              onBlur={formik.handleBlur}
+              onChange={formik.handleChange}
+              value={formik.values.owner_name}
+            />
+            <TextField
+              error={!!(formik.touched.source_api && formik.errors.source_api)}
+              fullWidth
+              helperText={formik.touched.source_api && formik.errors.source_api}
+              label="source_api"
+              name="source_api"
+              onBlur={formik.handleBlur}
+              onChange={formik.handleChange}
+              value={formik.values.source_api}
             />
             <TextField
               error={!!(formik.touched.description && formik.errors.description)}

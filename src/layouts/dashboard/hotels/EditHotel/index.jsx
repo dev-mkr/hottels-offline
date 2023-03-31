@@ -2,6 +2,7 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import { Box, Button, Stack, Typography, TextField, MenuItem, Modal, Card } from "@mui/material";
 import LoadingButton from "@mui/lab/LoadingButton";
+import EditIcon from "@mui/icons-material/Edit";
 import axios from "src/api/axios";
 import { useState } from "react";
 // import FacilitiesCheckboxes from "./components/FacilitiesCheckboxes";
@@ -20,7 +21,24 @@ const style = {
   overflow: "auto",
 };
 
-const EditHotel = (props) => {
+const EditHotel = ({
+  admin_id,
+  id,
+  token,
+  name,
+  city,
+  country,
+  location,
+  latitude,
+  longitude,
+  code,
+  description,
+  owner_name,
+  source_api,
+  stars,
+  image,
+  facilities,
+}) => {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -41,8 +59,24 @@ const EditHotel = (props) => {
       })
       .catch(() => formik.setFieldError("image", "could not upload"));
   };
+
   const formik = useFormik({
-    initialValues: { admin_id: props.id, ...props },
+    initialValues: {
+      admin_id,
+      name,
+      city,
+      country,
+      location,
+      latitude,
+      longitude,
+      code,
+      description,
+      owner_name,
+      source_api,
+      stars,
+      image,
+      facilities: [1],
+    },
     validationSchema: Yup.object({
       name: Yup.string().max(255).required("Hotel name is required"),
       location: Yup.string().max(255).required("Hotel location is required"),
@@ -51,27 +85,25 @@ const EditHotel = (props) => {
       longitude: Yup.number().required("longtude location is required"),
       city: Yup.string().max(255).required("City is required"),
       country: Yup.string().max(255).required("Country name is required"),
+      owner_name: Yup.string().max(255).required("Owner name is required"),
       description: Yup.string().max(2000).required("Description is required"),
     }),
     onSubmit: async (values, helpers) => {
       values["_method"] = "PUT";
-      console.log(values);
       try {
         const res = await axios.request({
           method: "POST",
-          url: `/api/admin/hotels/${props.id}`,
+          url: `/api/admin/hotels/${id}`,
           headers: {
             "content-type": "application/json",
-            Authorization: `Bearer ${props.token}`,
+            Authorization: `Bearer ${token}`,
           },
           data: JSON.stringify(values),
         });
-        console.log(res);
         if (res.status === 200) {
           setOpen(false);
         }
       } catch (err) {
-        console.log(err);
         helpers.setStatus({ success: false });
         helpers.setErrors({ submit: err.response.data.message });
         helpers.setSubmitting(false);
@@ -92,9 +124,10 @@ const EditHotel = (props) => {
 
   return (
     <>
-      <Button onClick={handleOpen} variant="contained">
+      <MenuItem disableRipple onClick={handleOpen}>
+        <EditIcon />
         Edit
-      </Button>
+      </MenuItem>
       <Modal
         open={open}
         onClose={handleClose}
@@ -180,6 +213,26 @@ const EditHotel = (props) => {
                 onBlur={formik.handleBlur}
                 onChange={formik.handleChange}
                 value={formik.values.code}
+              />
+              <TextField
+                error={!!(formik.touched.owner_name && formik.errors.owner_name)}
+                fullWidth
+                helperText={formik.touched.owner_name && formik.errors.owner_name}
+                label="Owner name"
+                name="owner_name"
+                onBlur={formik.handleBlur}
+                onChange={formik.handleChange}
+                value={formik.values.owner_name}
+              />
+              <TextField
+                error={!!(formik.touched.source_api && formik.errors.source_api)}
+                fullWidth
+                helperText={formik.touched.source_api && formik.errors.source_api}
+                label="source_api"
+                name="source_api"
+                onBlur={formik.handleBlur}
+                onChange={formik.handleChange}
+                value={formik.values.source_api}
               />
               <TextField
                 error={!!(formik.touched.description && formik.errors.description)}

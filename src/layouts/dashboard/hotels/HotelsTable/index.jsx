@@ -13,11 +13,13 @@ import {
   TableRow,
   Typography,
   Button,
+  Popover,
 } from "@mui/material";
 import axios from "src/api/axios";
 import { useAuthUser } from "react-auth-kit";
 //components
 import { Scrollbar } from "src/components/Scrollbar";
+import HotellsTableCells from "./components/HotelsTableCells";
 import { Link } from "react-router-dom";
 import DeleteHotel from "../DeleteHotel";
 const EditHotel = lazy(() => import("../EditHotel"));
@@ -52,66 +54,91 @@ export const HotelsTable = () => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPageIndex(1);
   };
-
   if (error)
     return (
       <Typography sx={{ color: "red" }}>Failed to fetch {error.response.data.error}</Typography>
     );
 
-  const hotels = data.response.data.map((props) => {
-    const { id, country, city, name } = props;
-    return (
-      <TableRow hover key={id}>
-        <TableCell padding="checkbox" align="center">
-          {id}
-        </TableCell>
-        <TableCell>
-          <Typography variant="subtitle2" align="center">
-            {country}
-          </Typography>
-        </TableCell>
-        <TableCell align="center">{city}</TableCell>
-        <TableCell align="center">{name}</TableCell>
-        <TableCell align="center" name="contracts">
-          {Math.floor(Math.random() * 100000)}
-        </TableCell>
-        <TableCell align="center" name="rooms">
-          {Math.floor(Math.random() * 100000)}
-        </TableCell>
-        {isAdmin && (
-          <TableCell align="center" name="dmc">
-            <HotelDmcPopover hotelId={id} token={authorisation.token} />
-          </TableCell>
-        )}
-        {isAdmin && (
-          <TableCell align="center" neme="direct">
-            {2}
-          </TableCell>
-        )}
+  // const hotels = data.response.data.map((props) => {
+  //   const { id, country, city, name } = props;
+  //   const [anchorEl, setAnchorEl] = useState(null);
+  //   const handleClick = (event) => {
+  //     setAnchorEl(event.currentTarget);
+  //   };
 
-        <TableCell>
-          <Stack direction="row" spacing={1}>
-            <Link
-              to={`/manage-hotel/${id}`}
-              style={{ textDecoration: "none" }}
-              state={{ hotelName: name }}
-            >
-              <Button variant="contained">Manage</Button>
-            </Link>
-            {isAdmin && <EditHotel {...props} token={authorisation.token} />}
-            {isAdmin && (
-              <DeleteHotel
-                hotelName={name}
-                hotelId={id}
-                token={authorisation.token}
-                mutate={mutate}
-              />
-            )}
-          </Stack>
-        </TableCell>
-      </TableRow>
-    );
-  });
+  //   const handleClose = () => {
+  //     setAnchorEl(null);
+  //   };
+
+  //   const open = Boolean(anchorEl);
+  //   const popoverId = open ? "simple-popover" : undefined;
+
+  //   return (
+  //     <TableRow hover key={id}>
+  //       <TableCell padding="checkbox" align="center">
+  //         {id}
+  //       </TableCell>
+  //       <TableCell>
+  //         <Typography variant="subtitle2" align="center">
+  //           {country}
+  //         </Typography>
+  //       </TableCell>
+  //       <TableCell align="center">{city}</TableCell>
+  //       <TableCell align="center">{name}</TableCell>
+  //       <TableCell align="center" name="contracts">
+  //         {Math.floor(Math.random() * 100000)}
+  //       </TableCell>
+  //       <TableCell align="center" name="rooms">
+  //         {Math.floor(Math.random() * 100000)}
+  //       </TableCell>
+  //       {isAdmin && (
+  //         <TableCell align="center" name="dmc">
+  //           <HotelDmcPopover hotelId={id} token={authorisation.token} />
+  //         </TableCell>
+  //       )}
+  //       {isAdmin && (
+  //         <TableCell align="center" neme="direct">
+  //           YES / NO
+  //         </TableCell>
+  //       )}
+
+  //       <TableCell>
+  //         <Button aria-describedby={popoverId} variant="contained" onClick={handleClick}>
+  //           Open Popover
+  //         </Button>
+  //         <Popover
+  //           id={popoverId}
+  //           open={open}
+  //           anchorEl={anchorEl}
+  //           onClose={handleClose}
+  //           anchorOrigin={{
+  //             vertical: "bottom",
+  //             horizontal: "left",
+  //           }}
+  //         >
+  //           <Stack direction="column" spacing={1}>
+  //             <Link
+  //               to={`/manage-hotel/${id}`}
+  //               style={{ textDecoration: "none" }}
+  //               state={{ hotelName: name }}
+  //             >
+  //               <Button variant="contained">Manage</Button>
+  //             </Link>
+  //             {isAdmin && <EditHotel {...props} token={authorisation.token} admin_id={user.id} />}
+  //             {isAdmin && (
+  //               <DeleteHotel
+  //                 hotelName={name}
+  //                 hotelId={id}
+  //                 token={authorisation.token}
+  //                 mutate={mutate}
+  //               />
+  //             )}
+  //           </Stack>
+  //         </Popover>
+  //       </TableCell>
+  //     </TableRow>
+  //   );
+  // });
 
   return (
     <Card>
@@ -133,7 +160,16 @@ export const HotelsTable = () => {
                 <TableCell>Actions</TableCell>
               </TableRow>
             </TableHead>
-            <TableBody>{hotels}</TableBody>
+            <TableBody>
+              <HotellsTableCells
+                hotels={data.response.data}
+                token={authorisation.token}
+                isAdmin={isAdmin}
+                isNotDmc={isNotDmc}
+                mutate={mutate}
+                userId={user.id}
+              />
+            </TableBody>
           </Table>
         </Box>
       </Scrollbar>
@@ -148,18 +184,4 @@ export const HotelsTable = () => {
       />
     </Card>
   );
-};
-
-HotelsTable.propTypes = {
-  count: PropTypes.number,
-  items: PropTypes.array,
-  onDeselectAll: PropTypes.func,
-  onDeselectOne: PropTypes.func,
-  onPageChange: PropTypes.func,
-  onRowsPerPageChange: PropTypes.func,
-  onSelectAll: PropTypes.func,
-  onSelectOne: PropTypes.func,
-  page: PropTypes.number,
-  rowsPerPage: PropTypes.number,
-  selected: PropTypes.array,
 };
