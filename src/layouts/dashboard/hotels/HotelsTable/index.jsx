@@ -95,7 +95,7 @@ export const HotelsTable = () => {
             >
               <Button variant="contained">Manage</Button>
             </Link>
-            {isAdmin && <EditHotel {...props} />}
+            {isAdmin && <EditHotel {...props} token={authorisation.token} />}
             {isAdmin && (
               <DeleteHotel
                 hotelName={name}
