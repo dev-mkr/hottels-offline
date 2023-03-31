@@ -4,16 +4,16 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import { Box, Button, Stack, Typography, TextField, MenuItem } from "@mui/material";
 import LoadingButton from "@mui/lab/LoadingButton";
-// import axios from "src/api/axios";
-import axios from "axios";
+import axios from "src/api/axios";
 import { useState } from "react";
 import FacilitiesCheckboxes from "./components/FacilitiesCheckboxes";
 import GoogleMapsInput from "./components/GoogleMapsInput";
-import { redirect } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const AddNewHotel = () => {
   const authUserData = useAuthUser();
   const { authorisation, user } = authUserData();
+  const navigate = useNavigate();
 
   const [selectedImage, setSelectedImage] = useState();
   const [isImgUpload, setIsImgUpload] = useState(false);
@@ -58,24 +58,20 @@ const AddNewHotel = () => {
       description: Yup.string().max(2000).required("Description is required"),
     }),
     onSubmit: async (values, helpers) => {
-      console.log("clicked");
       try {
         const res = await axios.request({
           method: "POST",
-          url: "https://edu-garage.com/api/admin/hotels",
+          url: "/api/admin/hotels",
           headers: {
             "content-type": "application/json",
             Authorization: `Bearer ${authorisation.token}`,
           },
           data: JSON.stringify(values),
         });
-
-        console.log(res);
         if (res?.status === 200) {
-          return redirect("/");
+          return navigate("/");
         }
       } catch (err) {
-        console.log(err.response);
         helpers.setStatus({ success: false });
         helpers.setErrors({ submit: String(err.response.data.message) });
         helpers.setSubmitting(false);

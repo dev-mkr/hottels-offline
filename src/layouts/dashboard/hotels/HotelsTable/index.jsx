@@ -19,6 +19,7 @@ import { useAuthUser } from "react-auth-kit";
 //components
 import { Scrollbar } from "src/components/Scrollbar";
 import { Link } from "react-router-dom";
+import DeleteHotel from "../DeleteHotel";
 const EditHotel = lazy(() => import("../EditHotel"));
 const HotelDmcPopover = lazy(() => import("../HotelDmcPopover"));
 
@@ -85,7 +86,7 @@ export const HotelsTable = () => {
           </TableCell>
         )}
 
-        <TableCell width="70%">
+        <TableCell>
           <Stack direction="row" spacing={1}>
             <Link
               to={`/manage-hotel/${id}`}
@@ -95,11 +96,7 @@ export const HotelsTable = () => {
               <Button variant="contained">Manage</Button>
             </Link>
             {isAdmin && <EditHotel {...props} />}
-            {isAdmin && (
-              <Button variant="contained" color="error">
-                Archive
-              </Button>
-            )}
+            {isAdmin && <DeleteHotel hotelName={name} hotelId={id} token={authorisation.token} />}
           </Stack>
         </TableCell>
       </TableRow>

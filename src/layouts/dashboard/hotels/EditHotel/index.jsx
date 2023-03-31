@@ -59,6 +59,8 @@ const EditHotel = (props) => {
       description: Yup.string().max(2000).required("Description is required"),
     }),
     onSubmit: async (values, helpers) => {
+      values["_method"] = "PUT";
+      console.log(values);
       try {
         const res = await axios.request({
           method: "POST",
@@ -69,11 +71,12 @@ const EditHotel = (props) => {
           },
           data: JSON.stringify(values),
         });
-
+        console.log(res);
         if (res.status === 200) {
           setOpen(false);
         }
       } catch (err) {
+        console.log(err);
         helpers.setStatus({ success: false });
         helpers.setErrors({ submit: err.response.data.message });
         helpers.setSubmitting(false);
