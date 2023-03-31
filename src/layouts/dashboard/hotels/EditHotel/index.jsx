@@ -42,7 +42,7 @@ const EditHotel = (props) => {
       .catch(() => formik.setFieldError("image", "could not upload"));
   };
   const formik = useFormik({
-    initialValues: { admin_id: user.id, ...props },
+    initialValues: { admin_id: props.id, ...props },
     validationSchema: Yup.object({
       name: Yup.string().max(255).required("Hotel name is required"),
       location: Yup.string().max(255).required("Hotel location is required"),
