@@ -5,7 +5,7 @@ const HotelsActions = lazy(() => import("./HotelsActions"));
 
 const HotelsTable = ({ hotels, token, isAdmin, userId, isNotDmc, mutate }) => {
   const hotelsCells = hotels.map((hotel) => {
-    const { id, country, city, name } = hotel;
+    const { id, country, city, name, direct_hotel } = hotel;
 
     return (
       <TableRow hover key={id}>
@@ -32,7 +32,7 @@ const HotelsTable = ({ hotels, token, isAdmin, userId, isNotDmc, mutate }) => {
         )}
         {isAdmin && (
           <TableCell align="center" neme="direct">
-            YES / NO
+            {direct_hotel?.id ? "YES" : "NO"}
           </TableCell>
         )}
         <HotelsActions
