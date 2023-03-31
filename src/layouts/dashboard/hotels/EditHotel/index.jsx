@@ -1,5 +1,3 @@
-import { useAuthUser } from "react-auth-kit";
-
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { Box, Button, Stack, Typography, TextField, MenuItem, Modal, Card } from "@mui/material";
@@ -26,9 +24,6 @@ const EditHotel = (props) => {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-
-  const authUserData = useAuthUser();
-  const { authorisation, user } = authUserData();
 
   const [selectedImage, setSelectedImage] = useState();
   const [isImgUpload, setIsImgUpload] = useState(false);
@@ -67,7 +62,7 @@ const EditHotel = (props) => {
           url: `/api/admin/hotels/${props.id}`,
           headers: {
             "content-type": "application/json",
-            Authorization: `Bearer ${authorisation.token}`,
+            Authorization: `Bearer ${props.token}`,
           },
           data: JSON.stringify(values),
         });
