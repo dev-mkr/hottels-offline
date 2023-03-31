@@ -17,7 +17,7 @@ const SingleDmc = ({ name, email, id, hotelId, token, mutate }) => {
       </TableCell>
       <TableCell align="center">{email}</TableCell>
 
-      <TableCell width="50%">
+      <TableCell width="30%">
         <Stack direction="row" spacing={1}>
           <Button
             variant="contained"
