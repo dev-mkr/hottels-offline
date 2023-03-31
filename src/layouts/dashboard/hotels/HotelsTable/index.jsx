@@ -32,10 +32,16 @@ const fetcher = ([url, token]) =>
 export const HotelsTable = () => {
   const authUserData = useAuthUser();
   const { authorisation, user } = authUserData();
+  const isNotDmc = ["account_owner", "hotel_director", "super_admin", "admin"].includes(user.role);
+  const isAdmin = ["account_owner", "super_admin", "admin"].includes(user.role);
+
   const [pageIndex, setPageIndex] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const { data, error, mutate } = useSWR(
-    [`/api/admin/hotels?page=${pageIndex}&per-page=${rowsPerPage}`, authorisation.token],
+    [
+      `/api/${isNotDmc ? "admin" : "dmc"}/hotels?page=${pageIndex}&per-page=${rowsPerPage}`,
+      authorisation.token,
+    ],
     fetcher,
     { suspense: true }
   );
@@ -51,9 +57,6 @@ export const HotelsTable = () => {
     return (
       <Typography sx={{ color: "red" }}>Failed to fetch {error.response.data.error}</Typography>
     );
-
-  const isNotDmc = ["account_owner", "hotel_director", "super_admin", "admin"].includes(user.role);
-  const isAdmin = ["account_owner", "super_admin", "admin"].includes(user.role);
 
   const hotels = data.response.data.map((props) => {
     const { id, country, city, name } = props;
