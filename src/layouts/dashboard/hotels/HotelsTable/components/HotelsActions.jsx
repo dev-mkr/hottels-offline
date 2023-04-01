@@ -60,6 +60,7 @@ const HotelsActions = ({ hotel, mutate, userId, token, isAdmin }) => {
   const handleClose = () => {
     setAnchorEl(null);
   };
+  const showDeleteAction = user.role === "super_admin" || user.role === "admin";
 
   return (
     <TableCell>
@@ -98,10 +99,9 @@ const HotelsActions = ({ hotel, mutate, userId, token, isAdmin }) => {
 
         <Divider sx={{ my: 0.5 }} />
 
-        {user.role === "super_admin" ||
-          (user.role === "admin" && (
-            <DeleteHotel hotelName={hotel.name} hotelId={hotel.id} token={token} mutate={mutate} />
-          ))}
+        {showDeleteAction && (
+          <DeleteHotel hotelName={hotel.name} hotelId={hotel.id} token={token} mutate={mutate} />
+        )}
       </StyledMenu>
     </TableCell>
   );
