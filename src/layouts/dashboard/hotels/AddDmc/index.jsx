@@ -52,9 +52,7 @@ const AddDmc = ({ token, hotelId }) => {
   return (
     <>
       <Stack spacing={1}>
-        <Typography variant="h5" sx={{ opacity: "0.7" }}>
-          Manage Dmcs
-        </Typography>
+        <Typography variant="h5">Manage Dmcs</Typography>
       </Stack>
       <Card>
         <Scrollbar>

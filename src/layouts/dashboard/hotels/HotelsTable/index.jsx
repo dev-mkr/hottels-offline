@@ -1,4 +1,4 @@
-import { useState, lazy } from "react";
+import { useState } from "react";
 import useSWR from "swr";
 
 import {

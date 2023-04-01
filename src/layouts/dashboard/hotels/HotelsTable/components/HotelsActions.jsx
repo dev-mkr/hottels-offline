@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { useAuthUser } from "react-auth-kit";
+
 import DeleteHotel from "../../DeleteHotel";
 import EditHotel from "../../EditHotel";
 
@@ -47,6 +49,9 @@ const StyledMenu = styled((props) => (
 }));
 
 const HotelsActions = ({ hotel, mutate, userId, token, isAdmin }) => {
+  const authUserData = useAuthUser();
+  const { user } = authUserData();
+
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
@@ -82,7 +87,7 @@ const HotelsActions = ({ hotel, mutate, userId, token, isAdmin }) => {
         <Link
           to={`/manage-hotel/${hotel.id}`}
           style={{ textDecoration: "none", color: "inherit" }}
-          state={{ hotelName: hotel.name }}
+          state={{ hotelName: hotel.name, account_owner: hotel.account_owner }}
         >
           <MenuItem disableRipple>
             <ManageAccountsIcon />
@@ -93,9 +98,10 @@ const HotelsActions = ({ hotel, mutate, userId, token, isAdmin }) => {
 
         <Divider sx={{ my: 0.5 }} />
 
-        {isAdmin && (
-          <DeleteHotel hotelName={hotel.name} hotelId={hotel.id} token={token} mutate={mutate} />
-        )}
+        {user.role === "super_admin" ||
+          (user.role === "admin" && (
+            <DeleteHotel hotelName={hotel.name} hotelId={hotel.id} token={token} mutate={mutate} />
+          ))}
       </StyledMenu>
     </TableCell>
   );
