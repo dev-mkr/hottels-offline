@@ -8,7 +8,13 @@ import { Box, Button, Container, Stack, SvgIcon, Typography } from "@mui/materia
 import { HotelsTable } from "src/layouts/dashboard/hotels/HotelsTable";
 import { CustomersSearch } from "../../sections/customer/Customers-search";
 import { Link } from "react-router-dom";
+import { useAuthUser } from "react-auth-kit";
+
 const Page = () => {
+  const authUserData = useAuthUser();
+  const { user } = authUserData();
+  const isNotDmc = ["account_owner", "hotel_director", "super_admin", "admin"].includes(user.role);
+
   return (
     <>
       <Box
@@ -24,18 +30,20 @@ const Page = () => {
               <Stack spacing={1}>
                 <Typography variant="h4">Hotels overview</Typography>
               </Stack>
-              <Link to="/add-new-hotel" style={{ textDecoration: "none" }}>
-                <Button
-                  startIcon={
-                    <SvgIcon fontSize="small">
-                      <PlusIcon />
-                    </SvgIcon>
-                  }
-                  variant="contained"
-                >
-                  Add
-                </Button>
-              </Link>
+              {isNotDmc && (
+                <Link to="/add-new-hotel" style={{ textDecoration: "none" }}>
+                  <Button
+                    startIcon={
+                      <SvgIcon fontSize="small">
+                        <PlusIcon />
+                      </SvgIcon>
+                    }
+                    variant="contained"
+                  >
+                    Add
+                  </Button>
+                </Link>
+              )}
             </Stack>
             <CustomersSearch />
             <HotelsTable />

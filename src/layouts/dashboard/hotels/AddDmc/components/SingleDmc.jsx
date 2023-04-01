@@ -4,7 +4,6 @@ import addDmc from "../helpers/addDmc";
 
 const SingleDmc = ({ name, email, id, hotelId, token }) => {
   const [isAdded, setIsAdded] = useState(false);
-  const [isDeleted, setIsDeleted] = useState(false);
 
   return (
     <TableRow hover key={id}>

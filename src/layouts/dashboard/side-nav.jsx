@@ -42,15 +42,7 @@ export const SideNav = (props) => {
         }}
       >
         <Box sx={{ p: 3 }}>
-          <Box
-            component={Link}
-            href="/"
-            sx={{
-              display: "inline-flex",
-              height: 32,
-              width: 32,
-            }}
-          ></Box>
+          <Typography variant="h4">Hotels Offline </Typography>
         </Box>
         <Divider sx={{ borderColor: "neutral.700" }} />
         <Box

@@ -17,7 +17,6 @@ const deleteDmc = async (hotelId, dmcId, token, setIsDeleted, mutate) => {
     });
     if (res.status === 200) {
       setIsDeleted(true);
-      console.log("mutate is running");
       mutate();
     }
   } catch (err) {
