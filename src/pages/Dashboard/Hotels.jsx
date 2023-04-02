@@ -9,6 +9,8 @@ import { HotelsTable } from "src/layouts/dashboard/hotels/HotelsTable";
 import { CustomersSearch } from "../../sections/customer/Customers-search";
 import { Link } from "react-router-dom";
 import { useAuthUser } from "react-auth-kit";
+import { Suspense } from "react";
+import Loading from "src/components/Loading";
 
 const Page = () => {
   const authUserData = useAuthUser();
@@ -30,6 +32,7 @@ const Page = () => {
               <Stack spacing={1}>
                 <Typography variant="h4">Hotels overview</Typography>
               </Stack>
+
               {isNotDmc && (
                 <Link to="/add-new-hotel" style={{ textDecoration: "none" }}>
                   <Button
@@ -46,7 +49,9 @@ const Page = () => {
               )}
             </Stack>
             <CustomersSearch />
-            <HotelsTable />
+            <Suspense fallback={<Loading />}>
+              <HotelsTable />
+            </Suspense>
           </Stack>
         </Container>
       </Box>

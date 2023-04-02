@@ -24,7 +24,7 @@ const Page = () => (
       <Routes>
         <Route index element={<Hotels />} />
         <Route path="/add-new-hotel" element={<AddNewHotel />} />
-        <Route path="/manage-hotel/:hotelId" element={<ManageHotel />} />
+        {/* <Route path="/manage-hotel/:hotelId" element={<ManageHotel />} /> */}
         <Route path="*" element={<NotFound />} />
       </Routes>
     </Suspense>

@@ -18,6 +18,7 @@ import {
 import axios from "src/api/axios";
 import { Scrollbar } from "src/components/Scrollbar";
 import SingleDmc from "./components/SingleDmc";
+import Loading from "src/components/Loading";
 //components
 // import { Link } from "react-router-dom";
 
@@ -35,10 +36,9 @@ const AddDmc = () => {
 
   const [pageIndex, setPageIndex] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
-  const { data, error } = useSWR(
+  const { data, error, isLoading } = useSWR(
     [`/api/users/unique/dmc?allowed-types=dmc&page=${pageIndex}&per-page=${rowsPerPage}`, token],
-    fetcher,
-    { suspense: true }
+    fetcher
   );
   const onPageChange = (event, value) => {
     setPageIndex(value);
@@ -52,6 +52,8 @@ const AddDmc = () => {
     return (
       <Typography sx={{ color: "red" }}>Failed to fetch {error.response.data.error}</Typography>
     );
+
+  if (isLoading) return <Loading />;
 
   const dmcs = data.response.data.map(({ name, email, id }) => {
     return <SingleDmc key={id} name={name} email={email} id={id} hotelId={hotelId} token={token} />;

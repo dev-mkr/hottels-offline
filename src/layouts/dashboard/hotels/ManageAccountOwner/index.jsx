@@ -40,8 +40,8 @@ const ManageAccountOwner = ({ token, currentAccountOwner, hotelName }) => {
   // get all account owners
   const { data, error, isLoading } = useSWR(
     [`/api/admins/account-owner?page=${pageIndex}&per-page=${rowsPerPage}`, token],
-    fetcher,
-    { suspense: true }
+    fetcher
+    // { suspense: true }
   );
   const onPageChange = (event, value) => {
     setPageIndex(value);

@@ -38,7 +38,8 @@ export const HotelsTable = () => {
       `/api/${isNotDmc ? "admin" : "dmc"}/hotels?page=${pageIndex}&per-page=${rowsPerPage}`,
       authorisation.token,
     ],
-    fetcher
+    fetcher,
+    { suspense: true }
   );
   const onPageChange = (event, value) => {
     setPageIndex(value);
@@ -51,7 +52,7 @@ export const HotelsTable = () => {
     return (
       <Typography sx={{ color: "red" }}>Failed to fetch {error.response.data.error}</Typography>
     );
-  if (isLoading) return <Loading />;
+  // if (isLoading) return <Loading />;
 
   return (
     <Card>
