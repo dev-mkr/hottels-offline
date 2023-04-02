@@ -47,7 +47,7 @@ const GoogleMapsInput = ({ setFieldValue }) => {
     onPlaceSelected: (place) => extractLocationInfo(place, setFieldValue),
     // types: ["(lodging)"],
     options: {
-      types: ["(lodging)"],
+      types: ["lodging", "hotel"],
     },
   });
 
