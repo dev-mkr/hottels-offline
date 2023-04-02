@@ -1,6 +1,7 @@
 import { useState } from "react";
 import useSWR from "swr";
 import { useParams } from "react-router-dom";
+import { useAuthUser } from "react-auth-kit";
 
 import {
   Box,
@@ -26,7 +27,10 @@ const fetcher = ([url, token]) =>
     headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
   }).then((res) => res.data);
 
-const AddDmc = ({ token }) => {
+const AddDmc = () => {
+  const authUserData = useAuthUser();
+  const { authorisation } = authUserData();
+  const token = authorisation.token;
   const { hotelId } = useParams();
 
   const [pageIndex, setPageIndex] = useState(0);
@@ -55,38 +59,39 @@ const AddDmc = ({ token }) => {
 
   return (
     <>
-      <Stack spacing={1}>
-        <Typography variant="h5">Manage Dmcs</Typography>
-      </Stack>
-      <Card>
-        <Scrollbar>
-          <Box sx={{ minWidth: 800 }}>
-            <Table>
-              <TableHead>
-                <TableRow>
-                  <TableCell padding="checkbox" align="center">
-                    id
-                  </TableCell>
-                  <TableCell align="center">Name</TableCell>
-                  <TableCell align="center">Email</TableCell>
+      <Stack spacing={2}>
+        <Typography variant="h5">Activate Dmcs</Typography>
 
-                  <TableCell>Actions</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>{dmcs}</TableBody>
-            </Table>
-          </Box>
-        </Scrollbar>
-        <TablePagination
-          rowsPerPageOptions={[]}
-          component="div"
-          count={data.response.meta.total}
-          onPageChange={onPageChange}
-          page={pageIndex}
-          rowsPerPage={rowsPerPage}
-          onRowsPerPageChange={handleChangeRowsPerPage}
-        />
-      </Card>
+        <Card>
+          <Scrollbar>
+            <Box sx={{ minWidth: 800 }}>
+              <Table>
+                <TableHead>
+                  <TableRow>
+                    <TableCell padding="checkbox" align="center">
+                      id
+                    </TableCell>
+                    <TableCell align="center">Name</TableCell>
+                    <TableCell align="center">Email</TableCell>
+
+                    <TableCell>Actions</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>{dmcs}</TableBody>
+              </Table>
+            </Box>
+          </Scrollbar>
+          <TablePagination
+            rowsPerPageOptions={[]}
+            component="div"
+            count={data.response.meta.total}
+            onPageChange={onPageChange}
+            page={pageIndex}
+            rowsPerPage={rowsPerPage}
+            onRowsPerPageChange={handleChangeRowsPerPage}
+          />
+        </Card>
+      </Stack>
     </>
   );
 };

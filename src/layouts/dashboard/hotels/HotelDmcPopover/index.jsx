@@ -1,29 +1,22 @@
 import { useState } from "react";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TablePagination,
-  TableRow,
-  Box,
-  Button,
-  Typography,
-  Modal,
-  Card,
-} from "@mui/material";
-import { Scrollbar } from "src/components/Scrollbar";
+import { Button, Typography, Modal, Stack, Card } from "@mui/material";
+import ClearIcon from "@mui/icons-material/Clear";
+
 import useSWR from "swr";
 import axios from "src/api/axios";
 import Loading from "src/components/Loading";
-import SingleDmc from "./components/SingleDmc";
+import ViewActivDmcs from "./components/ViewActivDmcs";
+import SearchToAddDmc from "./components/SearchToAddDmc";
+import { Scrollbar } from "src/components/Scrollbar";
+import AddDmc from "../AddDmc";
 
 const style = {
   position: "absolute",
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  width: 800,
+  width: "100vw",
+  maxWidth: 600,
   maxHeight: 600,
   bgcolor: "background.paper",
   boxShadow: 24,
@@ -64,19 +57,6 @@ export default function HotelDmcPopover({ hotelId, token }) {
     );
 
   if (isLoading) return <Loading />;
-  const dmcs = data.response.data.map(({ name, email, id }) => {
-    return (
-      <SingleDmc
-        key={id}
-        name={name}
-        mutate={mutate}
-        email={email}
-        id={id}
-        hotelId={hotelId}
-        token={token}
-      />
-    );
-  });
 
   return (
     <div>
@@ -87,39 +67,26 @@ export default function HotelDmcPopover({ hotelId, token }) {
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
-        {data.response.data.length !== 0 ? (
-          <Card sx={style}>
-            <Scrollbar>
-              <Box sx={{ minWidth: 600 }}>
-                <Table>
-                  <TableHead>
-                    <TableRow>
-                      <TableCell padding="checkbox" align="center">
-                        id
-                      </TableCell>
-                      <TableCell align="center">Name</TableCell>
-                      <TableCell align="center">Email</TableCell>
+        <Card sx={style}>
+          <Scrollbar>
+            <Stack spacing={3}>
+              <ClearIcon onClick={handleClose} />
 
-                      <TableCell>Actions</TableCell>
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>{isLoading ? <Loading /> : dmcs}</TableBody>
-                </Table>
-              </Box>
-            </Scrollbar>
-            <TablePagination
-              rowsPerPageOptions={[]}
-              component="div"
-              count={data.response.meta.total}
-              onPageChange={onPageChange}
-              page={pageIndex}
-              rowsPerPage={rowsPerPage}
-              onRowsPerPageChange={handleChangeRowsPerPage}
-            />
-          </Card>
-        ) : (
-          <Typography sx={style}>please add dmcs from manage button</Typography>
-        )}
+              <SearchToAddDmc />
+              <ViewActivDmcs
+                hotelId={hotelId}
+                token={token}
+                data={data}
+                mutate={mutate}
+                pageIndex={pageIndex}
+                rowsPerPage={rowsPerPage}
+                onPageChange={onPageChange}
+                handleChangeRowsPerPage={handleChangeRowsPerPage}
+              />
+              <AddDmc />
+            </Stack>
+          </Scrollbar>
+        </Card>
       </Modal>
     </div>
   );

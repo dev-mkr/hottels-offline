@@ -25,7 +25,7 @@ const SingleDmc = ({ name, email, id, hotelId, token, mutate }) => {
             disabled={isDeleted}
             onClick={() => deleteDmc(hotelId, id, token, setIsDeleted, mutate)}
           >
-            {isDeleted ? "Deleted!" : "Delete"}
+            {isDeleted ? "UnActivated!" : "UnActivate"}
           </Button>
         </Stack>
       </TableCell>
