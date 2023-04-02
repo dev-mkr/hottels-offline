@@ -60,8 +60,7 @@ const HotelsActions = ({ hotel, mutate, userId, token, isAdmin }) => {
   const handleClose = () => {
     setAnchorEl(null);
   };
-  const showDeleteAction = user.role === "super_admin" || user.role === "admin";
-
+  const showDeleteAction = ["account_owner", "super_admin", "admin"].includes(user.role);
   return (
     <TableCell>
       <Button

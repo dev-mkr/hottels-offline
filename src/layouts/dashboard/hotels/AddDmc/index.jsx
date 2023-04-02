@@ -1,5 +1,7 @@
 import { useState } from "react";
 import useSWR from "swr";
+import { useParams } from "react-router-dom";
+
 import {
   Box,
   Card,
@@ -24,7 +26,9 @@ const fetcher = ([url, token]) =>
     headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
   }).then((res) => res.data);
 
-const AddDmc = ({ token, hotelId }) => {
+const AddDmc = ({ token }) => {
+  const { hotelId } = useParams();
+
   const [pageIndex, setPageIndex] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const { data, error } = useSWR(
