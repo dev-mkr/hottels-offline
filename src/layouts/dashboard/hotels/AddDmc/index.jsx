@@ -62,7 +62,7 @@ const AddDmc = () => {
   return (
     <>
       <Stack spacing={2}>
-        <Typography variant="h5">Activate Dmcs</Typography>
+        <Typography variant="h5">Available Dmcs</Typography>
 
         <Card>
           <Scrollbar>

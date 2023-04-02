@@ -1,10 +1,9 @@
 import axios from "src/api/axios";
-
-const removeAccOwnerFromHotel = async (
+const removeDirectHotelFromHotel = async (
   hotelId,
   token,
-  setSelectedAccountOwnerId,
-  setSelectedAccountOwnerName,
+  setSelectedId,
+  selectedDirectHotelName,
   mutate
 ) => {
   try {
@@ -13,13 +12,13 @@ const removeAccOwnerFromHotel = async (
 
     const res = await axios.request({
       method: "POST",
-      url: `/api/admin/hotels/${hotelId}/owner/destroy`,
+      url: `/api/admin/hotels/${hotelId}/direct/destroy`,
       headers: { "content-type": "application/json", Authorization: `Bearer ${token}` },
       data: data,
     });
     if (res.status === 200) {
-      setSelectedAccountOwnerId(null);
-      setSelectedAccountOwnerName(null);
+      setSelectedId(null);
+      selectedDirectHotelName(null);
       mutate();
     }
   } catch (err) {
@@ -27,4 +26,4 @@ const removeAccOwnerFromHotel = async (
   }
 };
 
-export default removeAccOwnerFromHotel;
+export default removeDirectHotelFromHotel;

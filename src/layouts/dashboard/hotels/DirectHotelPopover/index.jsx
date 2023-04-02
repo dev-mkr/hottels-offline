@@ -3,8 +3,8 @@ import { Button, Modal, Stack, Card } from "@mui/material";
 import ClearIcon from "@mui/icons-material/Clear";
 
 import { Scrollbar } from "src/components/Scrollbar";
-import SearchToAddAccOwner from "./components/SearchToAddAccOwner";
-import ManageAccountOwner from "../ManageAccountOwner";
+import SearchToAddDirectHotel from "./components/SearchToAddDirectHotel";
+import ManageDirectHotel from "../ManageDirectHotel";
 
 const style = {
   position: "absolute",
@@ -21,7 +21,7 @@ const style = {
   overflow: "auto",
 };
 
-export default function AccountOwnerPopover({ account_owner, hotelName, hotelId, mutate }) {
+export default function DirectHotelPopover({ direct_hotel, hotelName, hotelId, mutate }) {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -29,7 +29,7 @@ export default function AccountOwnerPopover({ account_owner, hotelName, hotelId,
   return (
     <>
       <Button onClick={handleOpen} color="inherit">
-        {account_owner?.name ? account_owner.name : "None"}
+        {direct_hotel?.name ? "Yes" : "No"}
       </Button>
       <Modal
         open={open}
@@ -41,10 +41,10 @@ export default function AccountOwnerPopover({ account_owner, hotelName, hotelId,
           <Scrollbar>
             <Stack spacing={3}>
               <ClearIcon onClick={handleClose} />
-              <SearchToAddAccOwner />
-              <ManageAccountOwner
+              <SearchToAddDirectHotel />
+              <ManageDirectHotel
                 hotelName={hotelName}
-                currentAccountOwner={account_owner}
+                currentDirectHotel={direct_hotel}
                 hotelId={hotelId}
                 mutate={mutate}
               />

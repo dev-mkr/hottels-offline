@@ -1,25 +1,26 @@
 import axios from "src/api/axios";
 
-const removeAccOwnerFromHotel = async (
+const addDirectHotelToHotel = async (
   hotelId,
+  direct_hotel_id,
   token,
-  setSelectedAccountOwnerId,
-  setSelectedAccountOwnerName,
+  setSelectedId,
+  selectedDirectHotelName,
   mutate
 ) => {
   try {
     let data = new FormData();
-    data.append("_method", "delete");
+    data.append("direct_hotel_id", direct_hotel_id);
 
     const res = await axios.request({
       method: "POST",
-      url: `/api/admin/hotels/${hotelId}/owner/destroy`,
+      url: `/api/admin/hotels/${hotelId}/direct/store`,
       headers: { "content-type": "application/json", Authorization: `Bearer ${token}` },
       data: data,
     });
     if (res.status === 200) {
-      setSelectedAccountOwnerId(null);
-      setSelectedAccountOwnerName(null);
+      setSelectedId(res.data.response.direct_hotel.id);
+      selectedDirectHotelName(res.data.response.direct_hotel.name);
       mutate();
     }
   } catch (err) {
@@ -27,4 +28,4 @@ const removeAccOwnerFromHotel = async (
   }
 };
 
-export default removeAccOwnerFromHotel;
+export default addDirectHotelToHotel;

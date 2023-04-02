@@ -1,21 +1,21 @@
 import { Stack, TableCell, TableRow, Typography, Button } from "@mui/material";
-import addAccOwnerToHotel from "../helpers/addAccOwnerToHotel";
+import addDirectHotelToHotel from "../helpers/addDirectHotelToHotel";
 
-const SingleAccountOwner = ({
-  hotelId,
+const SingleDirectHotel = ({
   name,
   email,
-  id,
+  direct_hotel_id,
+  hotelId,
   token,
   isDisabled,
-  setAccountOwner,
-  selectedAccountOwnerName,
+  setSelectedId,
+  selectedDirectHotelName,
   mutate,
 }) => {
   return (
-    <TableRow hover key={id}>
+    <TableRow hover key={direct_hotel_id}>
       <TableCell padding="checkbox" align="center">
-        {id}
+        {direct_hotel_id}
       </TableCell>
       <TableCell>
         <Typography variant="subtitle2" align="center">
@@ -29,12 +29,12 @@ const SingleAccountOwner = ({
           <Button
             variant="contained"
             onClick={() =>
-              addAccOwnerToHotel(
+              addDirectHotelToHotel(
                 hotelId,
-                id,
+                direct_hotel_id,
                 token,
-                setAccountOwner,
-                selectedAccountOwnerName,
+                setSelectedId,
+                selectedDirectHotelName,
                 mutate
               )
             }
@@ -48,4 +48,4 @@ const SingleAccountOwner = ({
   );
 };
 
-export default SingleAccountOwner;
+export default SingleDirectHotel;

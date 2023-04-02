@@ -16,8 +16,8 @@ import {
 } from "@mui/material";
 import axios from "src/api/axios";
 import { Scrollbar } from "src/components/Scrollbar";
-import SingleAccountOwner from "./components/SingleAccountOwner";
-import removeAccOwnerFromHotel from "./helpers/removeAccOwnerFromHotel";
+import SingleDirectHotel from "./components/SingleDirectHotel";
+import removeDirectHotelFromHotel from "./helpers/removeDirectHotelFromHotel";
 import Loading from "src/components/Loading";
 
 const fetcher = ([url, token]) =>
@@ -26,21 +26,19 @@ const fetcher = ([url, token]) =>
     headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
   }).then((res) => res.data);
 
-const ManageAccountOwner = ({ currentAccountOwner, hotelName, hotelId, mutate }) => {
+const ManageDirectHotel = ({ currentDirectHotel, hotelName, hotelId, mutate }) => {
   const authUserData = useAuthUser();
   const { authorisation } = authUserData();
   const token = authorisation.token;
 
-  const [selectedAccountOwnerId, setSelectedAccountOwnerId] = useState(currentAccountOwner?.id);
-  const [selectedAccountOwnerName, setSelectedAccountOwnerName] = useState(
-    currentAccountOwner?.name
-  );
+  const [selectedId, setSelectedId] = useState(currentDirectHotel?.id);
+  const [selectedDirectHotelName, setSelectedDirectHotelName] = useState(currentDirectHotel?.name);
 
   const [pageIndex, setPageIndex] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
-  // get all account owners
+  // get all direct hotels
   const { data, error, isLoading } = useSWR(
-    [`/api/admins/account-owner?page=${pageIndex}&per-page=${rowsPerPage}`, token],
+    [`/api/admins/hotel-director?page=${pageIndex}&per-page=${rowsPerPage}`, token],
     fetcher
     // { suspense: true }
   );
@@ -61,16 +59,16 @@ const ManageAccountOwner = ({ currentAccountOwner, hotelName, hotelId, mutate })
 
   const accountOwners = data.response.data.map(({ name, email, id }) => {
     return (
-      <SingleAccountOwner
-        hotelId={hotelId}
+      <SingleDirectHotel
         key={id}
         name={name}
         email={email}
-        id={id}
+        direct_hotel_id={id}
+        hotelId={hotelId}
         token={token}
-        isDisabled={Boolean(selectedAccountOwnerId)}
-        setAccountOwner={setSelectedAccountOwnerId}
-        selectedAccountOwnerName={setSelectedAccountOwnerName}
+        isDisabled={Boolean(selectedId)}
+        setSelectedId={setSelectedId}
+        selectedDirectHotelName={setSelectedDirectHotelName}
         mutate={mutate}
       />
     );
@@ -78,25 +76,24 @@ const ManageAccountOwner = ({ currentAccountOwner, hotelName, hotelId, mutate })
 
   return (
     <>
-      <Typography variant="h5">Manage account owner</Typography>
+      <Typography variant="h5">Manage direct hotel</Typography>
       <Typography
         variant="body1"
         direction="row"
         sx={{ display: "flex", alignItems: "center", columnGap: 1 }}
       >
-        {selectedAccountOwnerName ? (
+        {selectedDirectHotelName ? (
           <>
             <Typography>
-              The current account owner for <b>"{hotelName}"</b> is{" "}
-              <b>{selectedAccountOwnerName}</b>
+              The current direct hotel for <b>"{hotelName}"</b> is <b>{selectedDirectHotelName}</b>
             </Typography>
             <Button
               onClick={() => {
-                removeAccOwnerFromHotel(
+                removeDirectHotelFromHotel(
                   hotelId,
                   token,
-                  setSelectedAccountOwnerId,
-                  setSelectedAccountOwnerName,
+                  setSelectedId,
+                  setSelectedDirectHotelName,
                   mutate
                 );
               }}
@@ -106,10 +103,9 @@ const ManageAccountOwner = ({ currentAccountOwner, hotelName, hotelId, mutate })
             </Button>
           </>
         ) : (
-          "There is no account owner for this hotel"
+          "There is no direct hotel for this hotel"
         )}
       </Typography>
-      {/* call remove with setslected and accid and hotelid */}
       <Card>
         <Scrollbar>
           <Box sx={{ minWidth: 800 }}>
@@ -143,4 +139,4 @@ const ManageAccountOwner = ({ currentAccountOwner, hotelName, hotelId, mutate })
   );
 };
 
-export default ManageAccountOwner;
+export default ManageDirectHotel;

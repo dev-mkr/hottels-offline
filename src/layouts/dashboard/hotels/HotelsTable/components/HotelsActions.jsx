@@ -48,7 +48,7 @@ const StyledMenu = styled((props) => (
   },
 }));
 
-const HotelsActions = ({ hotel, mutate, userId, token, isAdmin }) => {
+const HotelsActions = ({ hotel, mutate, token, isAdmin }) => {
   const authUserData = useAuthUser();
   const { user } = authUserData();
 
@@ -94,7 +94,7 @@ const HotelsActions = ({ hotel, mutate, userId, token, isAdmin }) => {
             Manage
           </MenuItem>
         </Link>
-        {isAdmin && <EditHotel {...hotel} token={token} admin_id={userId} />}
+        {isAdmin && <EditHotel {...hotel} token={token} admin_id={user.id} />}
 
         <Divider sx={{ my: 0.5 }} />
 

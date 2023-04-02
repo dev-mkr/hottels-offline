@@ -19,11 +19,7 @@ const SingleDmc = ({ name, email, id, hotelId, token }) => {
 
       <TableCell width="50%">
         <Stack direction="row" spacing={1}>
-          <Button
-            variant="contained"
-            onClick={() => addDmc(hotelId, id, token, setIsAdded)}
-            disabled={isAdded}
-          >
+          <Button onClick={() => addDmc(hotelId, id, token, setIsAdded)} disabled={isAdded}>
             {isAdded ? "Activated!" : "Activate"}
           </Button>
         </Stack>

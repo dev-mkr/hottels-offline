@@ -82,7 +82,6 @@ export const HotelsTable = () => {
                 isAdmin={isAdmin}
                 isNotDmc={isNotDmc}
                 mutate={mutate}
-                userId={user.id}
               />
             </TableBody>
           </Table>

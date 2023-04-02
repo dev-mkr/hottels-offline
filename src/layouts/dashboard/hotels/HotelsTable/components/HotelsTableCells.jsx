@@ -1,13 +1,15 @@
 import { lazy } from "react";
 import { TableCell, TableRow, Typography } from "@mui/material";
+
 import AccountOwnerPopover from "../../AccountOwnerPopover";
+import DirectHotelPopover from "../../DirectHotelPopover";
 const HotelDmcPopover = lazy(() => import("../../HotelDmcPopover"));
 const HotelsActions = lazy(() => import("./HotelsActions"));
 
-const HotelsTable = ({ hotels, token, isAdmin, userId, isNotDmc, mutate }) => {
+const HotelsTable = ({ hotels, token, isAdmin, isNotDmc, mutate }) => {
   const hotelsCells = hotels.map((hotel) => {
     const { id, country, city, name, direct_hotel, account_owner } = hotel;
-    console.log(hotel);
+
     return (
       <TableRow hover key={id}>
         <TableCell padding="checkbox" align="center">
@@ -21,7 +23,12 @@ const HotelsTable = ({ hotels, token, isAdmin, userId, isNotDmc, mutate }) => {
         <TableCell align="center">{city}</TableCell>
         <TableCell align="center">{name}</TableCell>
         <TableCell align="center">
-          <AccountOwnerPopover account_owner={account_owner} hotelName={name} />
+          <AccountOwnerPopover
+            account_owner={account_owner}
+            hotelName={name}
+            hotelId={id}
+            mutate={mutate}
+          />
         </TableCell>
         <TableCell align="center" name="contracts">
           {Math.floor(Math.random() * 100000)}
@@ -36,16 +43,15 @@ const HotelsTable = ({ hotels, token, isAdmin, userId, isNotDmc, mutate }) => {
         )}
         {isAdmin && (
           <TableCell align="center" neme="direct">
-            {direct_hotel?.id ? "YES" : "NO"}
+            <DirectHotelPopover
+              direct_hotel={direct_hotel}
+              hotelName={name}
+              hotelId={id}
+              mutate={mutate}
+            />
           </TableCell>
         )}
-        <HotelsActions
-          hotel={hotel}
-          token={token}
-          userId={userId}
-          mutate={mutate}
-          isAdmin={isAdmin}
-        />
+        <HotelsActions hotel={hotel} token={token} mutate={mutate} isAdmin={isAdmin} />
       </TableRow>
     );
   });
