@@ -1,13 +1,25 @@
 import { useState } from "react";
 import { TextField, List, ListItem, ListItemText } from "@mui/material";
 import useSWR from "swr";
+import { useAuthUser } from "react-auth-kit";
+
+const fetcher = ([url, token]) =>
+  axios({
+    url,
+    headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+  }).then((res) => res.data);
 
 const SearchInput = () => {
+  const authUserData = useAuthUser();
+  const { authorisation } = authUserData();
+  const token = authorisation.token;
+
   const [query, setQuery] = useState("");
-  const { data: d, error } = useSWR(query ? `/api/search?q=${query}` : null);
-  // const data = [{ id: 1, name: "mohaemd" }];
-  const data = [];
+  const url = query ? `/api/users/search-by/name/users/${query}` : null;
+  const { data, error } = useSWR([url, token], fetcher);
+
   const handleQueryChange = (event) => {
+    console.log(event.target.value);
     setQuery(event.target.value);
   };
 

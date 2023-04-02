@@ -77,7 +77,7 @@ const ManageDirectHotel = ({ currentDirectHotel, hotelName, hotelId, mutate }) =
   return (
     <>
       <Typography variant="h5">Manage direct hotel</Typography>
-      <Typography
+      <div
         variant="body1"
         direction="row"
         sx={{ display: "flex", alignItems: "center", columnGap: 1 }}
@@ -105,7 +105,7 @@ const ManageDirectHotel = ({ currentDirectHotel, hotelName, hotelId, mutate }) =
         ) : (
           "There is no direct hotel for this hotel"
         )}
-      </Typography>
+      </div>
       <Card>
         <Scrollbar>
           <Box sx={{ minWidth: 800 }}>
