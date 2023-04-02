@@ -19,6 +19,7 @@ import axios from "src/api/axios";
 import { Scrollbar } from "src/components/Scrollbar";
 import SingleAccountOwner from "./components/SingleAccountOwner";
 import removeAccOwnerFromHotel from "./helpers/removeAccOwnerFromHotel";
+import Loading from "src/components/Loading";
 
 const fetcher = ([url, token]) =>
   axios({
@@ -37,7 +38,7 @@ const ManageAccountOwner = ({ token, currentAccountOwner, hotelName }) => {
   const [pageIndex, setPageIndex] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   // get all account owners
-  const { data, error } = useSWR(
+  const { data, error, isLoading } = useSWR(
     [`/api/admins/account-owner?page=${pageIndex}&per-page=${rowsPerPage}`, token],
     fetcher,
     { suspense: true }
@@ -49,21 +50,13 @@ const ManageAccountOwner = ({ token, currentAccountOwner, hotelName }) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPageIndex(1);
   };
-  // get account owners forHotel
-  const { data: hotel, error: hotelError } = useSWR(`/api/admin/hotels/${hotelId}`, fetcher, {
-    // fetcher: (url) => {
-    //   axios({
-    //     url,
-    //     headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
-    //   }).then((res) => res.data);
-    // },
-    suspense: true,
-  });
-  console.log(hotel); 
+
   if (error)
     return (
       <Typography sx={{ color: "red" }}>Failed to fetch {error.response.data.error}</Typography>
     );
+
+  if (isLoading) return <Loading />;
 
   const accountOwners = data.response.data.map(({ name, email, id }) => {
     return (
