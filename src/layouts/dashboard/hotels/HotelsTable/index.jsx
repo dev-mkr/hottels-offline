@@ -16,6 +16,7 @@ import axios from "src/api/axios";
 import { useAuthUser } from "react-auth-kit";
 //components
 import { Scrollbar } from "src/components/Scrollbar";
+import Loading from "src//components/Loading";
 import HotellsTableCells from "./components/HotelsTableCells";
 
 const fetcher = ([url, token]) =>
@@ -32,13 +33,12 @@ export const HotelsTable = () => {
 
   const [pageIndex, setPageIndex] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
-  const { data, error, mutate } = useSWR(
+  const { data, error, isLoading, mutate } = useSWR(
     [
       `/api/${isNotDmc ? "admin" : "dmc"}/hotels?page=${pageIndex}&per-page=${rowsPerPage}`,
       authorisation.token,
     ],
-    fetcher,
-    { suspense: true }
+    fetcher
   );
   const onPageChange = (event, value) => {
     setPageIndex(value);
@@ -51,6 +51,7 @@ export const HotelsTable = () => {
     return (
       <Typography sx={{ color: "red" }}>Failed to fetch {error.response.data.error}</Typography>
     );
+  if (isLoading) return <Loading />;
 
   return (
     <Card>
@@ -65,6 +66,7 @@ export const HotelsTable = () => {
                 <TableCell align="center">Country</TableCell>
                 <TableCell align="center">City</TableCell>
                 <TableCell align="center">Hotel</TableCell>
+                <TableCell align="center">Account owner</TableCell>
                 <TableCell align="center">Contracts</TableCell>
                 <TableCell align="center">Rooms</TableCell>
                 {isNotDmc && <TableCell align="center">Dmc’s</TableCell>}

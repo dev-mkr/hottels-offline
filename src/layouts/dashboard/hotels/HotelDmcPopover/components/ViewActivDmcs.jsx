@@ -37,7 +37,7 @@ export default function ViewActivDmcs({
   return (
     <div>
       <Stack spacing={2}>
-        <Typography variant="h5">Activ Dmcs</Typography>
+        <Typography variant="h5">Active Dmcs</Typography>
         {data.response.data.length !== 0 ? (
           <>
             <Table>

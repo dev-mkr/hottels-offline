@@ -59,7 +59,7 @@ export default function HotelDmcPopover({ hotelId, token }) {
   if (isLoading) return <Loading />;
 
   return (
-    <div>
+    <>
       <Button onClick={handleOpen}>{data.response.data.length}</Button>
       <Modal
         open={open}
@@ -88,6 +88,6 @@ export default function HotelDmcPopover({ hotelId, token }) {
           </Scrollbar>
         </Card>
       </Modal>
-    </div>
+    </>
   );
 }
