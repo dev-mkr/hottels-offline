@@ -1,5 +1,7 @@
 import { useState } from "react";
 import useSWR from "swr";
+import { useParams } from "react-router-dom";
+
 import {
   Box,
   Button,
@@ -16,6 +18,7 @@ import {
 import axios from "src/api/axios";
 import { Scrollbar } from "src/components/Scrollbar";
 import SingleAccountOwner from "./components/SingleAccountOwner";
+import removeAccOwnerFromHotel from "./helpers/removeAccOwnerFromHotel";
 
 const fetcher = ([url, token]) =>
   axios({
@@ -23,8 +26,9 @@ const fetcher = ([url, token]) =>
     headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
   }).then((res) => res.data);
 
-const ManageAccountOwner = ({ token, hotelId, currentAccountOwner, hotelName }) => {
-  console.log(currentAccountOwner?.name);
+const ManageAccountOwner = ({ token, currentAccountOwner, hotelName }) => {
+  const { hotelId } = useParams();
+
   const [selectedAccountOwnerId, setSelectedAccountOwnerId] = useState(currentAccountOwner?.id);
   const [selectedAccountOwnerName, setSelectedAccountOwnerName] = useState(
     currentAccountOwner?.name
@@ -32,7 +36,7 @@ const ManageAccountOwner = ({ token, hotelId, currentAccountOwner, hotelName }) 
 
   const [pageIndex, setPageIndex] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
-  //change url
+  // get all account owners
   const { data, error } = useSWR(
     [`/api/admins/account-owner?page=${pageIndex}&per-page=${rowsPerPage}`, token],
     fetcher,
@@ -45,13 +49,22 @@ const ManageAccountOwner = ({ token, hotelId, currentAccountOwner, hotelName }) 
     setRowsPerPage(parseInt(event.target.value, 10));
     setPageIndex(1);
   };
-
+  // get account owners forHotel
+  const { data: hotel, error: hotelError } = useSWR(`/api/admin/hotels/${hotelId}`, fetcher, {
+    // fetcher: (url) => {
+    //   axios({
+    //     url,
+    //     headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+    //   }).then((res) => res.data);
+    // },
+    suspense: true,
+  });
+  console.log(hotel); 
   if (error)
     return (
       <Typography sx={{ color: "red" }}>Failed to fetch {error.response.data.error}</Typography>
     );
 
-  // change it to single accountowner
   const accountOwners = data.response.data.map(({ name, email, id }) => {
     return (
       <SingleAccountOwner
@@ -61,7 +74,7 @@ const ManageAccountOwner = ({ token, hotelId, currentAccountOwner, hotelName }) 
         id={id}
         hotelId={hotelId}
         token={token}
-        isDisabled={selectedAccountOwnerId}
+        isDisabled={Boolean(selectedAccountOwnerId)}
         setAccountOwner={setSelectedAccountOwnerId}
         selectedAccountOwnerName={setSelectedAccountOwnerName}
       />
@@ -84,8 +97,12 @@ const ManageAccountOwner = ({ token, hotelId, currentAccountOwner, hotelName }) 
             </Typography>
             <Button
               onClick={() => {
-                setSelectedAccountOwnerId(null);
-                setSelectedAccountOwnerName(null);
+                removeAccOwnerFromHotel(
+                  hotelId,
+                  token,
+                  setSelectedAccountOwnerId,
+                  setSelectedAccountOwnerName
+                );
               }}
               color="error"
             >

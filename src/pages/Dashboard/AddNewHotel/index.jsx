@@ -6,9 +6,10 @@ import { Box, Button, Stack, Typography, TextField, MenuItem } from "@mui/materi
 import LoadingButton from "@mui/lab/LoadingButton";
 import axios from "src/api/axios";
 import { useState } from "react";
-import FacilitiesCheckboxes from "./components/FacilitiesCheckboxes";
-import GoogleMapsInput from "./components/GoogleMapsInput";
+
 import { useNavigate } from "react-router-dom";
+import FacilitiesCheckboxes from "src/layouts/dashboard/hotels/AddNewHotel/FacilitiesCheckboxes";
+import GoogleMapsInput from "src/layouts/dashboard/hotels/AddNewHotel/GoogleMapsInput";
 
 const AddNewHotel = () => {
   const authUserData = useAuthUser();
@@ -263,7 +264,7 @@ const AddNewHotel = () => {
                 {!formik.errors.image && formik.values.image ? "Success" : "Upload"}
               </LoadingButton>
             </Box>
-            {/* <FacilitiesCheckboxes handleChange={handleFacilitiesChange} /> */}
+            <FacilitiesCheckboxes handleChange={handleFacilitiesChange} />
           </Stack>
           {formik.errors.submit && (
             <Typography color="error" sx={{ mt: 3 }} variant="body2">
