@@ -1,5 +1,5 @@
 import { Suspense } from "react";
-import { useParams, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { useAuthUser } from "react-auth-kit";
 import { Box, Container, Stack, Typography } from "@mui/material";
 
@@ -8,7 +8,6 @@ import AddDmc from "src/layouts/dashboard/hotels/AddDmc";
 import ManageAccountOwner from "src/layouts/dashboard/hotels/ManageAccountOwner";
 
 const ManageHotel = () => {
-  const { hotelId } = useParams();
   const location = useLocation();
   const authUserData = useAuthUser();
   const { authorisation, user } = authUserData();
