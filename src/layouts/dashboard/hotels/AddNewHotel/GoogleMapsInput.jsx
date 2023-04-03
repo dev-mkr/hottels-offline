@@ -45,10 +45,10 @@ const GoogleMapsInput = ({ setFieldValue }) => {
   const { ref } = usePlacesWidget({
     apiKey: `${import.meta.env.VITE_API_KEY}`,
     onPlaceSelected: (place) => extractLocationInfo(place, setFieldValue),
-    // types: ["(lodging)"],
-    options: {
-      types: ["lodging", "hotel"],
-    },
+    types: ["(lodging)", "(hotel)"],
+    // options: {
+    //   types: ["(lodging)", "(hotel)"],
+    // },
   });
 
   return <TextField fullWidth color="secondary" variant="outlined" inputRef={ref} />;
