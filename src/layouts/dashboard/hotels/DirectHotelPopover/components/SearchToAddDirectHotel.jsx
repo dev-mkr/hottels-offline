@@ -9,7 +9,7 @@ const fetcher = ([url, token]) =>
     headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
   }).then((res) => res.data);
 
-const SearchInput = () => {
+const SearchToAddDirectHotel = () => {
   const authUserData = useAuthUser();
   const { authorisation } = authUserData();
   const token = authorisation.token;
@@ -52,4 +52,4 @@ const SearchInput = () => {
   );
 };
 
-export default SearchInput;
+export default SearchToAddDirectHotel;

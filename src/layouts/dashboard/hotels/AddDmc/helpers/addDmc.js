@@ -1,5 +1,5 @@
 import axios from "src/api/axios";
-const addDmc = async (hotelId, dmcId, token, setIsAdded) => {
+const addDmc = async (hotelId, dmcId, token, setIsAdded, mutate) => {
   let data = new FormData();
   data.append("dmc_id[]", dmcId);
   try {
@@ -11,6 +11,7 @@ const addDmc = async (hotelId, dmcId, token, setIsAdded) => {
     });
     if (res.status === 200) {
       setIsAdded(true);
+      mutate();
     }
   } catch (err) {
     setIsAdded(false);

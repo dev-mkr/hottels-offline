@@ -72,7 +72,7 @@ export default function HotelDmcPopover({ hotelId, token }) {
             <Stack spacing={3}>
               <ClearIcon onClick={handleClose} />
 
-              <SearchToAddDmc />
+              <SearchToAddDmc hotelId={hotelId} mutate={mutate} />
               <ViewActivDmcs
                 hotelId={hotelId}
                 token={token}
@@ -83,7 +83,7 @@ export default function HotelDmcPopover({ hotelId, token }) {
                 onPageChange={onPageChange}
                 handleChangeRowsPerPage={handleChangeRowsPerPage}
               />
-              <AddDmc />
+              <AddDmc hotelId={hotelId} mutate={mutate} />
             </Stack>
           </Scrollbar>
         </Card>

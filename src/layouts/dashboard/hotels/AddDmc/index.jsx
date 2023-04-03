@@ -28,11 +28,10 @@ const fetcher = ([url, token]) =>
     headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
   }).then((res) => res.data);
 
-const AddDmc = () => {
+const AddDmc = ({ hotelId, mutate }) => {
   const authUserData = useAuthUser();
   const { authorisation } = authUserData();
   const token = authorisation.token;
-  const { hotelId } = useParams();
 
   const [pageIndex, setPageIndex] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
@@ -56,7 +55,17 @@ const AddDmc = () => {
   if (isLoading) return <Loading />;
 
   const dmcs = data.response.data.map(({ name, email, id }) => {
-    return <SingleDmc key={id} name={name} email={email} id={id} hotelId={hotelId} token={token} />;
+    return (
+      <SingleDmc
+        key={id}
+        name={name}
+        email={email}
+        id={id}
+        hotelId={hotelId}
+        token={token}
+        mutate={mutate}
+      />
+    );
   });
 
   return (

@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Stack, TableCell, TableRow, Typography, Button } from "@mui/material";
 import addDmc from "../helpers/addDmc";
 
-const SingleDmc = ({ name, email, id, hotelId, token }) => {
+const SingleDmc = ({ name, email, id, hotelId, token, mutate }) => {
   const [isAdded, setIsAdded] = useState(false);
 
   return (
@@ -19,7 +19,7 @@ const SingleDmc = ({ name, email, id, hotelId, token }) => {
 
       <TableCell width="50%">
         <Stack direction="row" spacing={1}>
-          <Button onClick={() => addDmc(hotelId, id, token, setIsAdded)} disabled={isAdded}>
+          <Button onClick={() => addDmc(hotelId, id, token, setIsAdded, mutate)} disabled={isAdded}>
             {isAdded ? "Activated!" : "Activate"}
           </Button>
         </Stack>
